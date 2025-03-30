@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobiluygulamagelistirme/testpage.dart';
+import 'package:mobiluygulamagelistirme/login_screen.dart';
+import 'package:mobiluygulamagelistirme/map.dart';
+import 'package:mobiluygulamagelistirme/complaint.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -16,9 +18,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      initialRoute: '/testpage',
+      initialRoute: '/login',
       routes:{
-        '/testpage':(context) => testpage(),
+        '/map':(context) => map(),
+        '/complaint':(context)=> Complaint(),
+        '/login': (context) => LoginScreen(),
       },
     );
   }

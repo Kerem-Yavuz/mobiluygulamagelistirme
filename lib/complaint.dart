@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobiluygulamagelistirme/appbar.dart';
+import 'package:mobiluygulamagelistirme/drawer.dart';
 
 class Complaint extends StatefulWidget {
   @override
@@ -14,10 +16,8 @@ class _ComplaintState extends State<Complaint> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Text("Complaint"),
-      ),
+      appBar: MyAppBar(title: "Şikayet Et"),
+      drawer: MyDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -35,7 +35,7 @@ class _ComplaintState extends State<Complaint> {
             SizedBox(height: 15),
             TextField(
               decoration: InputDecoration(
-                labelText: "Complaint Details",
+                labelText: "Şikayet Detayları",
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
                 ),
@@ -91,7 +91,7 @@ class _ComplaintState extends State<Complaint> {
             SizedBox(height: 15),
             OutlinedButton(
               onPressed: _showKonu,
-              child: Text("Submit"),
+              child: Text("Kaydet"),
             ),
           ],
         ),

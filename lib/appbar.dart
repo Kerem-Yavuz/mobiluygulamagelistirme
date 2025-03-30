@@ -3,20 +3,13 @@ import 'package:flutter/material.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final GlobalKey<ScaffoldState> scaffoldKey;
 
-  MyAppBar({required this.title, required this.scaffoldKey});
+  MyAppBar({required this.title});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(title),
-      leading: IconButton(
-        icon: Icon(Icons.menu),
-        onPressed: () {
-          scaffoldKey.currentState?.openDrawer();
-        },
-      ),
     );
   }
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobiluygulamagelistirme/appbar.dart';
+import 'package:mobiluygulamagelistirme/drawer.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
@@ -7,6 +9,8 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: MyAppBar(title: "Giriş Yap"),
+      drawer: MyDrawer(),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -16,7 +20,7 @@ class LoginScreen extends StatelessWidget {
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                  labelText: 'Email',
+                  labelText: 'E-Posta',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -24,7 +28,7 @@ class LoginScreen extends StatelessWidget {
               TextField(
                 controller: _passwordController,
                 decoration: InputDecoration(
-                  labelText: 'Password',
+                  labelText: 'Şifre',
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
@@ -34,9 +38,9 @@ class LoginScreen extends StatelessWidget {
                 onPressed: () {
                   String email = _emailController.text;
                   String password = _passwordController.text;
-                  print('Email: \$email, Password: \$password');
+                  print('E-Posta: $email, Şifre: $password');
                 },
-                child: Text('Login'),
+                child: Text('Giriş Yap'),
               ),
             ],
           ),
