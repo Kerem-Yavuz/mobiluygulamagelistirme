@@ -17,7 +17,7 @@ var con = mysql.createConnection({//mysql connections
     host: "localhost",
     user: "root",
     password: "Mysql123!",
-    database: "eventapp",
+    database: "mobiluygulamagelistirme",
     port: 3306
     });
 
@@ -72,19 +72,18 @@ app.get("/login/check", (req, res) => {
         if (err) {
             return res.status(500).send('Database query failed.');
         }
-       
         if (results.length === 1) {
             let sqlStoredHashedPassword = results[0].user_Password; // we have already get the password with the first query so we are just checking it here
-            console.log(sqlStoredHashedPassword, hashedPassword);
+
             if (sqlStoredHashedPassword === hashedPassword) {
                 const token = jwt.sign({ username: person.username, id: results[0].userID }, JWT_SECRET, { expiresIn: '30d' });// creates token 
                 res.cookie('token', token, { httpOnly: true }); //stores that token in cookie
-                res.status(200);
+                res.status(200).json({success: "success"});
             } else {//Wrong password
-                res.status(400);
+                res.status(400).json({error: "Wrong pass or username"});
             }
         } else {//Wrong username
-            res.status(400);
+            res.status(400).json({error: "Wrong pass or username"});
         }
     });
 });
@@ -109,7 +108,7 @@ app.get("/signup/check", (req,res)=>
         if (results.length > 0) {
             return res.send("Bu Kullanıcı adı bulunuyor, giriş yapın yada başka bir kullanıcı adı seçin");
         } else {
-            let createUserQuery = `INSERT INTO users VALUES(0,"${person.username}","${hashedPassword}",1);`;// Creates user with person.username, person.password , groupID = 2 , and the automatic userID
+            let createUserQuery = `INSERT INTO users VALUES(0,"${person.username}","${hashedPassword}",3);`;// Creates user with person.username, person.password , groupID = 2 , and the automatic userID
 
             con.query(createUserQuery, function (err, result) {
                 if (err) {
