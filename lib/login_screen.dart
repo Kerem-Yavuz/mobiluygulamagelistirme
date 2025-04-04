@@ -70,7 +70,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(title: "Giriş Yap"),
-      drawer: MyDrawer(),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

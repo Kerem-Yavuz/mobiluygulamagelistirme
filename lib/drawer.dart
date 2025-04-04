@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ResimSaglayici.dart';
 
@@ -60,11 +61,12 @@ class MyDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.login),
-            title: Text("Giriş Yap"),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/login');
+            leading: Icon(Icons.logout),
+            title: Text("Çıkış Yap"),
+            onTap: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.remove('cookie');
+              Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
             },
           ),
         ],
