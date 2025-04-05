@@ -59,6 +59,34 @@ app.use((req, res, next) => {
 });
 
 
+app.post('/sendComplaint',isAuthenticated,(req,res) => // jwt token saved in shared preferences as 'cookie' id needed
+{
+    let title = req.body.title;
+    let message = req.body.message;
+    let userid = req.user.id; 
+    let query = "INSERT INTO `mobiluygulamagelistirme`.`complaints` (`complainant_id`, `complaint_title`, `complaint_message`) VALUES (?, ?, ?)";
+    con.query(query,[userid,title,message],(err,result)=>
+    {
+        if (err) {
+            return res.status(500).send('Database query failed. '+ err);
+        }
+        res.status(200).json({success: "success"});
+    });
+});
+
+app.post('/getComplaints',isAuthenticated,(req,res) => // jwt token saved in shared preferences as 'cookie' is needed
+{
+    let query = "select complaint_title,complaint_message, users.user_Name from complaints join users on complaints.complainant_id = users.user_ID";
+    con.query(query,(err,result)=>
+    {        
+        if (err) {
+            return res.status(500).send('Database query failed.');
+        }
+        res.status(200).json(result); // Example result [{"complaint_title":"Deneme","complaint_message":"Deneme","user_Name":"kerem"},{"complaint_title":"denemdemdemdme","complaint_message":"test","user_Name":"kerem"}]
+    });
+});
+
+
 app.get("/login/check", (req, res) => {
     const person = {
         username: req.query.username,
@@ -76,7 +104,7 @@ app.get("/login/check", (req, res) => {
             let sqlStoredHashedPassword = results[0].user_Password; // we have already get the password with the first query so we are just checking it here
 
             if (sqlStoredHashedPassword === hashedPassword) {
-                const token = jwt.sign({ username: person.username, id: results[0].userID }, JWT_SECRET, { expiresIn: '30d' });// creates token 
+                const token = jwt.sign({ id: results[0].user_ID }, JWT_SECRET, { expiresIn: '30d' });// creates token 
                 res.cookie('token', token, { httpOnly: true }); //stores that token in cookie
                 res.status(200).json({success: "success"});
             } else {//Wrong password
