@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobiluygulamagelistirme/login_screen.dart';
-import 'package:mobiluygulamagelistirme/map.dart';
+import 'package:mobiluygulamagelistirme/complaint_list_page.dart';
 import 'package:mobiluygulamagelistirme/complaint.dart';
+import 'complaint_data.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,8 +21,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/login',
       routes:{
-        '/map':(context) => map(),
-        '/complaint':(context)=> Complaint(),
+        '/complaint': (context) => Complaint(),
+        '/complaintList': (context) => ComplaintListPage(
+          complaints: ComplaintData.allComplaints,
+        ),
         '/login': (context) => LoginScreen(),
       },
     );
