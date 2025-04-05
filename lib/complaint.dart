@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobiluygulamagelistirme/appbar.dart';
 import 'package:mobiluygulamagelistirme/drawer.dart';
+import 'package:mobiluygulamagelistirme/complaint_data.dart';
+import 'package:mobiluygulamagelistirme/complaint_list_page.dart';
 
 class Complaint extends StatefulWidget {
   @override
@@ -43,66 +45,42 @@ class _ComplaintState extends State<Complaint> {
               controller: _complaintVController,
               maxLines: 4,
             ),
-            SizedBox(height: 25),
-            Text(
-              "Konu",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8), // Spacing between title and box
-            Container(
-              padding: EdgeInsets.all(12),
-              width: double.infinity, // Makes it take full width
-              decoration: BoxDecoration(
-                color: Colors.grey[200], // Background color
-                borderRadius: BorderRadius.circular(8), // Rounded corners
-                border: Border.all(color: Colors.black), // Border color
-              ),
-              child: Text(
-                "$konu", // Your content
-                style: TextStyle(fontSize: 24),
-
-              ),
-
-
-            ),
-            Text(
-              "Şikayet:",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8), // Spacing between title and box
-            Container(
-              padding: EdgeInsets.all(12),
-              width: double.infinity, // Makes it take full width
-              decoration: BoxDecoration(
-                color: Colors.grey[200], // Background color
-                borderRadius: BorderRadius.circular(8), // Rounded corners
-                border: Border.all(color: Colors.black), // Border color
-              ),
-              child: Text(
-                "$complaintV", // Your content
-                style: TextStyle(fontSize: 16),
-
-              ),
-
-
-            ),
-
-
             SizedBox(height: 15),
             OutlinedButton(
-              onPressed: _showKonu,
+              onPressed: () {
+                // Save complaint
+                ComplaintData.allComplaints.add({
+                  'konu': _konuController.text,
+                  'complaint': _complaintVController.text,
+                });
+
+                // Navigate to list of complaints
+                OutlinedButton(
+                  onPressed: () {
+                    ComplaintData.allComplaints.add({
+                      'konu': _konuController.text,
+                      'complaint': _complaintVController.text,
+                    });
+
+                    setState(() {
+                      konu = _konuController.text;
+                      complaintV = _complaintVController.text;
+                      _konuController.clear();
+                      _complaintVController.clear();
+                    });
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Şikayet kaydedildi")),
+                    );
+                  },
+                  child: Text("Kaydet"),
+                );
+              },
               child: Text("Kaydet"),
             ),
           ],
         ),
       ),
     );
-  }
-
-  void _showKonu() {
-    setState(() {
-      konu = _konuController.text;
-      complaintV = _complaintVController.text;
-    });
   }
 }
