@@ -46,10 +46,10 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.map),
-            title: Text("Harita"),
+            title: Text("Şikayet Listesi"),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/map');
+              Navigator.pushReplacementNamed(context, '/complaintList');
             },
           ),
           ListTile(
@@ -57,7 +57,7 @@ class MyDrawer extends StatelessWidget {
             title: Text("Şikayet Et"),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/complaint');
+              Navigator.pushReplacementNamed(context, '/complaint');
             },
           ),
           ListTile(
