@@ -20,22 +20,24 @@ class ComplaintData {
     // Prepare headers including the token in a cookie format
     final headers = {
       'Content-Type': 'application/json',
-      'Cookie': 'token=$token',
+      'Cookie': '$token',
     };
     // Make a POST request to the API with empty body
     final response = await http.post(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode({}), // send empty body if needed
     );
     // If request was successful (HTTP 200 OK)
     if (response.statusCode == 200) {
       final List<dynamic> responseData = jsonDecode(response.body); // Decode the JSON array
 
-
       // Convert each item (Map) in the list to Map<String, String>
       ComplaintData.allComplaints = responseData.map<Map<String, String>>((item) {
-        return item.map((key, value) => MapEntry(key.toString(), value.toString()));
+        return {
+          'title': item['complaint_title']?.toString() ?? '',
+          'complaint_message': item['complaint_message']?.toString() ?? '',
+          'username': item['user_Name']?.toString() ?? '',
+        };
       }).toList();
 
       print('Complaints loaded: ${ComplaintData.allComplaints}');

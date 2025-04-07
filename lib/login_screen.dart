@@ -19,19 +19,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // Function to login
   Future<void> _login() async {
-    final String email = _usernameController.text;
+    final String username = _usernameController.text;
     final String password = _passwordController.text;
 
     // checks if empty or not
-    if (email.isEmpty || password.isEmpty) {
+    if (username.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('E-posta ve şifre boş olamaz')),
+        SnackBar(content: Text('Kullanıcı Adı ve şifre boş olamaz')),
       );
       return;
     }
 
     // API endpoint for login
-    final Uri url = Uri.parse("${BASE_URL}/login/check?username=$email&password=$password");
+    final Uri url = Uri.parse("${BASE_URL}/login/check?username=$username&password=$password");
 
     try {
       // Sending GET request to the server
@@ -45,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (cookie != null) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setString("cookie", cookie); // Store the cookie locally
+          print(prefs.getString('cookie'));
         }
 
       
@@ -90,11 +91,11 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Email input field
+              // Username input field
               TextField(
                 controller: _usernameController,
                 decoration: InputDecoration(
-                  labelText: 'E-Posta',
+                  labelText: 'Kullanıcı Adı',
                   border: OutlineInputBorder(),
                 ),
               ),

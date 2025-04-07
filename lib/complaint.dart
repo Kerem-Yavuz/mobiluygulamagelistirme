@@ -71,7 +71,7 @@ class _ComplaintState extends State<Complaint> {
                 // Prepare HTTP headers
                 final headers = {
                   'Content-Type': 'application/json',
-                  'Cookie': 'token=$token',
+                  'Cookie': '$token',
                 };
                 // Prepare JSON body to send
                 final body = jsonEncode({
@@ -94,7 +94,7 @@ class _ComplaintState extends State<Complaint> {
                     _konuController.clear(); // Clear the title field
                     _complaintVController.clear(); // Clear the message field
                   });
-
+                  print(response.body);
                   // Show success message
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Şikayet başarıyla gönderildi")),

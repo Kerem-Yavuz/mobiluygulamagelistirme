@@ -20,11 +20,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       initialRoute: '/login',
-      routes:{
+      routes:{ // Routing
         '/complaint': (context) => Complaint(),
-        '/complaintList': (context) => ComplaintListPage(
-          complaints: ComplaintData.allComplaints,
-        ),
+        '/complaintList': (context) => ComplaintListPage(),
         '/login': (context) => LoginScreen(),
       },
     );

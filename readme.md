@@ -1,21 +1,26 @@
 Hocam uygulamayı açarken web kullanmayın server http olduğu için açılmayabilir
 
+Giriş İçin Bilgiler:
+
+Kullanıcı Adı: hakan.gencoglu
+Şifre: 123456
+
 Sayfaların Görevleri ve İçerikleri
 
 login_screen.dart -> Login ekranı
 complaint.dart -> şikayet yazma yeri
-complaint_data -> şikayet datalarının tutulduğu yer
+complaint_data -> şikayet verilerinin apiden çekildiği yer
 appbar.dart -> sayfalar için appbar
 complaint_list_page -> şikayetleri göstermek için
-constants -> uygulamadaki sabit değerler
+constants -> uygulamadaki sabit değerlerin daha kolay ulaşılabilmesi için 
 drawer -> sayfalar için drawer 
 ResimSaglayici -> resim çekmeye yarayan kısım
 
 
-Logo : https://cdn-icons-png.flaticon.com/512/1997/1997401.png
+Logo Apisi : https://cdn-icons-png.flaticon.com/512/1997/1997401.png
 
 
-Backend için aws de konteynır oluşturduk bu konteydnırda node.js ve mysql çalıştırıyoruz login bilgilerini ve şikayet verilerini tutuyoruz
+Login bilgilerini ve şikayet bilgilerini AWS de oluşturuduğumuz bir containerda node.js ve mysql ile backendimizi çalıştırıyoruz ve burda saklıyoruz
 
 Grup Üyeleri
 

@@ -26,16 +26,16 @@ class MyDrawer extends StatelessWidget {
                   future: resimSaglayici.fetchImage(1),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator(); // Yükleniyor göstergesi
+                      return CircularProgressIndicator(); // Show loading circle while waiting
                     } else if (snapshot.hasError || snapshot.data == null) {
                       return Text("Resim yüklenemedi.");
                     } else {
-                      return Image.memory(snapshot.data!, width: 50, height: 50, ); // Byte verisini resme çevir
+                      return Image.memory(snapshot.data!, width: 50, height: 50, ); //Transform Bytes into Image
                     }
                   },
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 20), // Sol tarafa 20 birim boşluk
+                  padding: EdgeInsets.only(left: 20),
                   child: Text(
                     "Menü",
                     style: TextStyle(color: Colors.white, fontSize: 24),
@@ -63,7 +63,7 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.logout),
             title: Text("Çıkış Yap"),
-            onTap: () async {
+            onTap: () async { // This will delete token in cookie for logout and then it will go to the login page
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.remove('cookie');
               Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
