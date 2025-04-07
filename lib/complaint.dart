@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:mobiluygulamagelistirme/appbar.dart';
 import 'package:mobiluygulamagelistirme/drawer.dart';
-import 'package:mobiluygulamagelistirme/complaint_data.dart';
-import 'package:mobiluygulamagelistirme/complaint_list_page.dart';
+import 'constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Complaint extends StatefulWidget {
   @override
@@ -47,38 +50,56 @@ class _ComplaintState extends State<Complaint> {
             ),
             SizedBox(height: 15),
             OutlinedButton(
-              onPressed: () {
-                // Save complaint
-                ComplaintData.allComplaints.add({
-                  'konu': _konuController.text,
-                  'complaint': _complaintVController.text,
+              onPressed: () async {
+                final title = _konuController.text.trim();
+                final message = _complaintVController.text.trim();
+
+                if (title.isEmpty || message.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Lütfen tüm alanları doldurun")),
+                  );
+                  return;
+                }
+
+                // Send to API
+                final prefs = await SharedPreferences.getInstance();
+                final token = prefs.getString('cookie') ?? '';
+
+                final headers = {
+                  'Content-Type': 'application/json',
+                  'Cookie': 'token=$token',
+                };
+
+                final body = jsonEncode({
+                  'title': title,
+                  'message': message,
                 });
 
-                // Navigate to list of complaints
-                OutlinedButton(
-                  onPressed: () {
-                    ComplaintData.allComplaints.add({
-                      'konu': _konuController.text,
-                      'complaint': _complaintVController.text,
-                    });
-
-                    setState(() {
-                      konu = _konuController.text;
-                      complaintV = _complaintVController.text;
-                      _konuController.clear();
-                      _complaintVController.clear();
-                    });
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Şikayet kaydedildi")),
-                    );
-                  },
-                  child: Text("Kaydet"),
+                final response = await http.post(
+                  Uri.parse('${BASE_URL}/sendComplaint'),
+                  headers: headers,
+                  body: body,
                 );
+
+                if (response.statusCode == 200) {
+                  setState(() {
+                    _konuController.clear();
+                    _complaintVController.clear();
+                  });
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Şikayet başarıyla gönderildi")),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Gönderme başarısız: ${response.statusCode}")),
+                  );
+                }
               },
               child: Text("Kaydet"),
             ),
-          ],
+
+            ],
         ),
       ),
     );

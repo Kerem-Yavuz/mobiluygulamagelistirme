@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobiluygulamagelistirme/appbar.dart';
-import 'package:mobiluygulamagelistirme/drawer.dart';
-import 'package:mobiluygulamagelistirme/constants.dart'; // <-- Constants dosyasını ekledik
+import 'package:mobiluygulamagelistirme/constants.dart';
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
