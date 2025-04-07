@@ -1,11 +1,11 @@
-Hocam uygulamayı açarken web kullanmayın server http olduğu için açılmayabilir
+### **Hocam uygulamayı açarken web kullanmayın server http olduğu için açılmayabilir. birde okul ağında http isteklerine izin vermediği için emülatör içinde sıkıntı olabilir direkt olarak telefonunuzdan denemek isterseniz [apk](https://github.com/Kerem-Yavuz/mobiluygulamagelistirme/blob/main/app-release.apk)yı ekledik**
 
-Giriş İçin Bilgiler:
+## Giriş İçin Bilgiler:
 
 Kullanıcı Adı: hakan.gencoglu
 Şifre: 123456
 
-Sayfaların Görevleri ve İçerikleri
+## Sayfaların Görevleri ve İçerikleri:
 
 login_screen.dart -> Login ekranı
 complaint.dart -> şikayet yazma yeri
@@ -17,12 +17,12 @@ drawer -> sayfalar için drawer
 ResimSaglayici -> resim çekmeye yarayan kısım
 
 
-Logo Apisi : https://cdn-icons-png.flaticon.com/512/1997/1997401.png
+### Logo Apisi : https://cdn-icons-png.flaticon.com/512/1997/1997401.png
 
 
-Login bilgilerini ve şikayet bilgilerini AWS de oluşturuduğumuz bir containerda node.js ve mysql ile backendimizi çalıştırıyoruz ve burda saklıyoruz
+### Login bilgilerini ve şikayet bilgilerini AWS de oluşturuduğumuz bir containerda node.js ve mysql ile backendimizi çalıştırıyoruz ve burda saklıyoruz
 
-Grup Üyeleri
+## Grup Üyeleri
 
 Abdullah Kerem Yavuz -> Login Screen + server tarafı
 Kerem Yavuz -> Appbar, Drawer + server tarafı
