@@ -10,11 +10,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> _login() async {
-    final String email = _emailController.text;
+    final String email = _usernameController.text;
     final String password = _passwordController.text;
 
     if (email.isEmpty || password.isEmpty) {
@@ -30,7 +30,6 @@ class _LoginScreenState extends State<LoginScreen> {
       final response = await http.get(url);
       print(response);
       if (response.statusCode == 200) {
-        // Çerezleri kaydet
         String? cookie = response.headers['set-cookie'];
         if (cookie != null) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -76,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextField(
-                controller: _emailController,
+                controller: _usernameController,
                 decoration: InputDecoration(
                   labelText: 'E-Posta',
                   border: OutlineInputBorder(),

@@ -9,10 +9,6 @@ class ResimSaglayici {
         {
           uri = Uri.parse('https://cdn-icons-png.flaticon.com/512/1997/1997401.png');
         }
-      else if(type == 2)
-        {
-          uri = Uri.parse('https://animaturk.com/istanbul-sabahattin-zaim-universitesi-haritasi,resim,403.png');
-        }
       else
         {
           throw Exception("Unkown Type");

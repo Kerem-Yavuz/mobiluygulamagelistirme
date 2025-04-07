@@ -3,9 +3,9 @@ import 'package:mobiluygulamagelistirme/drawer.dart';
 import 'package:mobiluygulamagelistirme/appbar.dart';
 
 class ComplaintListPage extends StatelessWidget {
-  final List<Map<String, String>> complaints;
+  final List<Map<String, String>> complaints; // Takes a list of complaint data
 
-  ComplaintListPage({required this.complaints});
+  ComplaintListPage({required this.complaints}); // Constructor requires complaint list
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +20,10 @@ class ComplaintListPage extends StatelessWidget {
         ),
       )
           : ListView.builder(
-        itemCount: complaints.length,
+        itemCount: complaints.length,  // Total complaints to show
         padding: EdgeInsets.all(12),
         itemBuilder: (context, index) {
-          final item = complaints[index];
+          final item = complaints[index];  // Current item
           return Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -33,7 +33,7 @@ class ComplaintListPage extends StatelessWidget {
             child: ListTile(
               contentPadding: EdgeInsets.all(16),
               title: Text(
-                item['konu'] ?? 'Konu Yok',
+                item['konu'] ?? 'Konu Yok', // Title text or fallback
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -42,7 +42,7 @@ class ComplaintListPage extends StatelessWidget {
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
-                  item['complaint'] ?? 'Detay Yok',
+                  item['complaint'] ?? 'Detay Yok', // Message text or fallback
                   style: TextStyle(fontSize: 16),
                 ),
               ),
