@@ -15,7 +15,7 @@ ResimSaglayici -> resim çekmeye yarayan kısım
 Logo : https://cdn-icons-png.flaticon.com/512/1997/1997401.png
 
 
-Login bilgilerini amazon awsde konteynırda saklıyoruz
+Backend için aws de konteynır oluşturduk bu konteydnırda node.js ve mysql çalıştırıyoruz login bilgilerini ve şikayet verilerini tutuyoruz
 
 Grup Üyeleri
 
