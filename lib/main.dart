@@ -162,6 +162,9 @@ class MyApp extends StatelessWidget {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     return MaterialApp(
       title: 'Flutter Demo',
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: themeNotifier.isDarkTheme ? ThemeMode.dark : ThemeMode.light,

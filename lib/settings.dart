@@ -21,7 +21,7 @@ class SettingsPage extends StatelessWidget {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     final isDarkTheme = themeNotifier.isDarkTheme;
     final currentLocale = context.locale;
-
+    print('settings.tr() => ${'settings'.tr()}');
     return Scaffold(
       appBar: MyAppBar(title: "settings".tr()),
       drawer: MyDrawer(),
@@ -31,7 +31,7 @@ class SettingsPage extends StatelessWidget {
           children: [
             // Theme switch
             SwitchListTile(
-              title: Text('settings.dark_theme').tr(),
+              title: Text('dark_theme'.tr()),
               value: isDarkTheme,
               onChanged: (bool value) {
                 themeNotifier.toggleTheme(value);

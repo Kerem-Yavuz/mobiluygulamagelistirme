@@ -240,6 +240,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 30),
 
               TextField(
+                controller: _usernameController,
                 decoration: const InputDecoration(
                   labelText: 'Kullanıcı Adı',
                   prefixIcon: Icon(Icons.person),
@@ -248,6 +249,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 15),
 
               TextField(
+                controller: _passwordController,
                 obscureText: true,
                 decoration: const InputDecoration(
                   labelText: 'Şifre',
