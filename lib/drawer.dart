@@ -61,6 +61,14 @@ class MyDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: Icon(Icons.person),
+            title: Text("Profil"),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, '/profile');
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.logout),
             title: Text("Çıkış Yap"),
             onTap: () async { // This will delete token in cookie for logout and then it will go to the login page
@@ -69,6 +77,7 @@ class MyDrawer extends StatelessWidget {
               Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
             },
           ),
+
         ],
       ),
     );
