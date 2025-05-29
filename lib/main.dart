@@ -1,10 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mobiluygulamagelistirme/login_screen.dart';
 import 'package:mobiluygulamagelistirme/complaint_list_page.dart';
 import 'package:mobiluygulamagelistirme/complaint.dart';
+import 'package:mobiluygulamagelistirme/profile.dart';
 import 'complaint_data.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -24,6 +28,7 @@ class MyApp extends StatelessWidget {
         '/complaint': (context) => Complaint(),
         '/complaintList': (context) => ComplaintListPage(),
         '/login': (context) => LoginScreen(),
+        '/profile': (context) => ProfilePage(),
       },
     );
   }

@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobiluygulamagelistirme/appbar.dart';
 import 'package:mobiluygulamagelistirme/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 // Login screen widget
 class LoginScreen extends StatefulWidget {
@@ -11,11 +13,47 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
+
 // State class for the login scren
 class _LoginScreenState extends State<LoginScreen> {
   // Controllers for input fields
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+
+  Future<UserCredential> signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    if (googleUser == null) {
+      throw Exception('Google sign in cancelled');
+    }
+
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+    final user = userCredential.user;
+    final profile = userCredential.additionalUserInfo?.profile;
+
+    if (user != null && profile != null) {
+      final prefs = await SharedPreferences.getInstance();
+
+      await prefs.setString('uid', user.uid);
+      await prefs.setString('email', user.email ?? '');
+      await prefs.setString('name', profile['name'] ?? user.displayName ?? '');
+      await prefs.setString('firstName', profile['given_name'] ?? '');
+      await prefs.setString('lastName', profile['family_name'] ?? '');
+      await prefs.setString('photoURL', profile['picture'] ?? user.photoURL ?? '');
+    }
+    Future.delayed(Duration(milliseconds: 300), () {
+      Navigator.pushReplacementNamed(context, '/profile');
+    });
+    return userCredential;
+  }
 
   // Function to login
   Future<void> _login() async {
@@ -114,6 +152,18 @@ class _LoginScreenState extends State<LoginScreen> {
               ElevatedButton(
                 onPressed: _login,
                 child: Text('Giriş Yap'),
+              ),
+              SizedBox(height: 20),
+              // Login button
+              ElevatedButton(
+                onPressed: signInWithGoogle,
+                child: Text('Google ile Giriş Yap'),
+              ),
+              SizedBox(height: 20),
+              // Login button
+              ElevatedButton(
+                onPressed: signInWithGoogle,
+                child: Text('Github ile Giriş Yap'),
               ),
             ],
           ),
