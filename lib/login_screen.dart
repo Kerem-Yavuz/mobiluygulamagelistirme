@@ -55,6 +55,109 @@ class _LoginScreenState extends State<LoginScreen> {
     return userCredential;
   }
 
+  Future<UserCredential> signInWithGitHub() async {
+    try {
+      final githubProvider = GithubAuthProvider();
+
+      final userCredential = await FirebaseAuth.instance.signInWithProvider(githubProvider);
+      final user = userCredential.user;
+      final profile = userCredential.additionalUserInfo?.profile;
+
+      if (user != null && profile != null) {
+        final prefs = await SharedPreferences.getInstance();
+
+        await prefs.setString('uid', user.uid);
+        await prefs.setString('email', user.email ?? '');
+        await prefs.setString('name', profile['name'] ?? user.displayName ?? '');
+        await prefs.setString('firstName', profile['given_name'] ?? '');
+        await prefs.setString('lastName', profile['family_name'] ?? '');
+        await prefs.setString('photoURL', profile['avatar_url'] ?? user.photoURL ?? '');
+      }
+
+      Future.delayed(const Duration(milliseconds: 300), () {
+        Navigator.pushReplacementNamed(context, '/profile');
+      });
+
+      return userCredential;
+
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'account-exists-with-different-credential') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Bu e-posta başka bir giriş yöntemiyle kayıtlı. Lütfen o yöntemle giriş yapın.',
+            ),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('GitHub ile giriş hatası: ${e.message}'),
+          ),
+        );
+      }
+      rethrow;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Beklenmeyen bir hata oluştu: ${e.toString()}'),
+        ),
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> signInWithEmailAndPassword() async {
+    final String email = _usernameController.text.trim();
+    final String password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Lütfen e-posta ve şifre girin.')),
+      );
+      return;
+    }
+
+    try {
+      final userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      final user = userCredential.user;
+
+      if (user != null) {
+        final prefs = await SharedPreferences.getInstance();
+
+        await prefs.setString('uid', user.uid);
+        await prefs.setString('email', user.email ?? '');
+        await prefs.setString('name', user.displayName ?? '');
+        await prefs.setString('firstName', '');
+        await prefs.setString('lastName', '');
+        await prefs.setString('photoURL', user.photoURL ?? '');
+      }
+
+      Navigator.pushReplacementNamed(context, '/profile');
+    } on FirebaseAuthException catch (e) {
+      String message = 'Giriş başarısız';
+
+      if (e.code == 'user-not-found') {
+        message = 'Bu e-posta ile kayıtlı bir kullanıcı yok.';
+      } else if (e.code == 'wrong-password') {
+        message = 'Şifre yanlış.';
+      } else if (e.code == 'invalid-email') {
+        message = 'Geçersiz e-posta formatı.';
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Bir hata oluştu: ${e.toString()}')),
+      );
+    }
+  }
+
+
+
   // Function to login
   Future<void> _login() async {
     final String username = _usernameController.text;
@@ -150,7 +253,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 20),
               // Login button
               ElevatedButton(
-                onPressed: _login,
+                onPressed: signInWithEmailAndPassword,
                 child: Text('Giriş Yap'),
               ),
               SizedBox(height: 20),
@@ -162,7 +265,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 20),
               // Login button
               ElevatedButton(
-                onPressed: signInWithGoogle,
+                onPressed: signInWithGitHub,
                 child: Text('Github ile Giriş Yap'),
               ),
             ],
