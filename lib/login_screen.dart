@@ -79,7 +79,6 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       return userCredential;
-
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -157,7 +156,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
 
-
   // Function to login
   Future<void> _login() async {
     final String username = _usernameController.text;
@@ -189,7 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
           print(prefs.getString('cookie'));
         }
 
-      
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Giriş başarılı!')),
         );
@@ -224,49 +222,74 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: MyAppBar(title: "Giriş Yap"),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Username input field
+              Text(
+                'Hoş Geldiniz',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 30),
+
               TextField(
-                controller: _usernameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Kullanıcı Adı',
-                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.person),
                 ),
               ),
-              SizedBox(height: 10),
-              // Password input field
+              const SizedBox(height: 15),
+
               TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(
+                obscureText: true,
+                decoration: const InputDecoration(
                   labelText: 'Şifre',
-                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.lock),
                 ),
-                obscureText: true, // Hide password characters
               ),
-              SizedBox(height: 20),
-              // Login button
-              ElevatedButton(
+              const SizedBox(height: 25),
+
+              ElevatedButton.icon(
                 onPressed: signInWithEmailAndPassword,
-                child: Text('Giriş Yap'),
+                icon: const Icon(Icons.email),
+                label: const Text('E-posta ile Giriş Yap'),
               ),
-              SizedBox(height: 20),
-              // Login button
-              ElevatedButton(
+              const SizedBox(height: 15),
+
+              ElevatedButton.icon(
                 onPressed: signInWithGoogle,
-                child: Text('Google ile Giriş Yap'),
+                icon: const Icon(Icons.g_mobiledata),
+                label: const Text('Google ile Giriş Yap'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  foregroundColor: Theme.of(context).colorScheme.onSurface,
+                  side: const BorderSide(color: Colors.white30),
+                ),
               ),
-              SizedBox(height: 20),
-              // Login button
-              ElevatedButton(
+              const SizedBox(height: 15),
+
+              ElevatedButton.icon(
                 onPressed: signInWithGitHub,
-                child: Text('Github ile Giriş Yap'),
+                icon: const Icon(Icons.code),
+                label: const Text('GitHub ile Giriş Yap'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  foregroundColor: Theme.of(context).colorScheme.onSurface,
+                  side: const BorderSide(color: Colors.white30),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              TextButton(
+                onPressed: () {},
+                child: const Text('Hesabınız yok mu? Kayıt olun'),
               ),
             ],
           ),

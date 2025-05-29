@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'ResimSaglayici.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -19,7 +18,6 @@ class MyDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blue),
             child: Row(
               children: [
                 FutureBuilder<Uint8List?>(
@@ -38,27 +36,11 @@ class MyDrawer extends StatelessWidget {
                   padding: EdgeInsets.only(left: 20),
                   child: Text(
                     "Menü",
-                    style: TextStyle(color: Colors.white, fontSize: 24),
+                    style: TextStyle(fontSize: 24),
                   ),
                 ),
               ],
             ),
-          ),
-          ListTile(
-            leading: Icon(Icons.map),
-            title: Text("Şikayet Listesi"),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/complaintList');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.warning_amber),
-            title: Text("Şikayet Et"),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/complaint');
-            },
           ),
           ListTile(
             leading: Icon(Icons.warning_amber),
@@ -93,7 +75,14 @@ class MyDrawer extends StatelessWidget {
               Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
             },
           ),
-
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text("Ayarlar"),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, '/settings');
+            },
+          ),
         ],
       ),
     );
