@@ -61,6 +61,22 @@ class MyDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: Icon(Icons.warning_amber),
+            title: Text("Şikayet Et Yeni"),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, '/newcomplaint');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.map),
+            title: Text("Şikayetler Yeni"),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, '/newcomplaintlist');
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.person),
             title: Text("Profil"),
             onTap: () {

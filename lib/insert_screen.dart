@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class InsertTestPage extends StatefulWidget {
-  const InsertTestPage({super.key});
+import 'appbar.dart';
+import 'drawer.dart';
+
+class InsertPage extends StatefulWidget {
+  const InsertPage({super.key});
 
   @override
-  State<InsertTestPage> createState() => _InsertTestPageState();
+  State<InsertPage> createState() => _InsertTestPageState();
 }
 
-class _InsertTestPageState extends State<InsertTestPage> {
+class _InsertTestPageState extends State<InsertPage> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   final imageUrlController = TextEditingController();
@@ -51,7 +54,8 @@ class _InsertTestPageState extends State<InsertTestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Veri Ekleme Testi")),
+      appBar: MyAppBar(title: "Veri Ekleme Test Sayfası"),
+      drawer: MyDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(

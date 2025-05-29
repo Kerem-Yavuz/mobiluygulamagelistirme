@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:mobiluygulamagelistirme/login_screen.dart';
 import 'package:mobiluygulamagelistirme/complaint_list_page.dart';
 import 'package:mobiluygulamagelistirme/complaint.dart';
-import 'package:mobiluygulamagelistirme/test.dart';
-import 'package:mobiluygulamagelistirme/test2.dart';
-import 'complaint_data.dart';
+import 'package:mobiluygulamagelistirme/profile.dart';
+import 'package:mobiluygulamagelistirme/insert_screen.dart';
+import 'package:mobiluygulamagelistirme/complaints.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -30,9 +30,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      initialRoute: '/test',
+      initialRoute: '/login',
       routes: {
-        '/test': (context) => InsertTestPage(),
+        '/newcomplaint': (context) => InsertPage(),
+        '/newcomplaintlist': (context) => ComplaintsPage(),
         '/complaint': (context) => Complaint(),
         '/complaintList': (context) => ComplaintListPage(),
         '/login': (context) => LoginScreen(),
