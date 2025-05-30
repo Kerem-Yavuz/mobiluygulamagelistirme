@@ -4,6 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'appbar.dart';
 import 'drawer.dart';
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -13,70 +16,74 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  // SharedPreferences data
-  String? uid;
-  String? email;
-  String? name;
-  String? firstName;
-  String? lastName;
-  String? photoURL;
 
-  // Firebase data
-  User? firebaseUser;
 
   @override
   void initState() {
     super.initState();
-    loadUserData();
+    fetchUserDataFromSupabase();
   }
 
-  Future<void> loadUserData() async {
+  Map<String, dynamic>? profile;
+
+  Future<void> fetchUserDataFromSupabase() async {
     final prefs = await SharedPreferences.getInstance();
+    final uid = prefs.getString('uid');
 
-    setState(() {
-      uid = prefs.getString('uid');
-      email = prefs.getString('email');
-      name = prefs.getString('name');
-      firstName = prefs.getString('firstName');
-      lastName = prefs.getString('lastName');
-      photoURL = prefs.getString('photoURL');
+    if (uid == null) {
+      print("UID shared_preferences içinde bulunamadı.");
+      return;
+    }
 
-      firebaseUser = FirebaseAuth.instance.currentUser;
-    });
+    final supabase = Supabase.instance.client;
+
+    try {
+      final response = await supabase
+          .from('Profil_Bilgileri') // tablo adı
+          .select()
+          .eq('uid', uid) // UID'ye göre filtrele
+          .single(); // sadece tek kayıt bekliyorsan kullan
+      setState(() {
+        profile = response;
+      });
+      print("Kullanıcı verisi: $response");
+    } catch (e) {
+      print("Veri çekme hatası: $e");
+    }
   }
 
-  Widget buildInfo(String label, String? value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Text(
-        "$label: ${value ?? '-'}",
-        style: const TextStyle(fontSize: 16),
-      ),
-    );
-  }
+
+
 
   @override
   Widget build(BuildContext context) {
+    if (profile == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
-      appBar: MyAppBar(title: "Profil"),
-      drawer: MyDrawer(),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+      appBar: MyAppBar(title: 'profil'),
+      drawer : MyDrawer(),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("From SharedPreferences", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            buildInfo("UID", uid),
-            buildInfo("Email", email),
-            buildInfo("Name", name),
-            buildInfo("First Name", firstName),
-            buildInfo("Last Name", lastName),
-            buildInfo("Photo URL", photoURL),
-            const SizedBox(height: 20),
-            const Text("From FirebaseAuth", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            buildInfo("Firebase UID", firebaseUser?.uid),
-            buildInfo("Firebase Email", firebaseUser?.email),
-            buildInfo("Firebase Name", firebaseUser?.displayName),
+            /*CircleAvatar(
+              radius: 50,
+              backgroundImage: NetworkImage(profile!['profil_resmi']),
+            ),*/
+            const SizedBox(height: 16),
+            Text(
+              "${profile!['isim']} ${profile!['soyisim']}",
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text("Email: ${profile!['email']}"),
+            Text("Doğum Yeri: ${profile!['dogum_yeri']}"),
+            Text("Doğum Tarihi: ${profile!['dogum_tarihi']}"),
+            Text("Yaşam Yeri: ${profile!['yasam_yeri']}"),
           ],
         ),
       ),

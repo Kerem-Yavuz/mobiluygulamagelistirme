@@ -22,7 +22,7 @@ class _ComplaintListPageState extends State<ComplaintsPage> {
   Future<void> fetchComplaints() async {
     try {
       final response = await supabase
-          .from('ID') // tablo adını kendi projenle eşleştir
+          .from('Complaints') // tablo adını kendi projenle eşleştir
           .select()
           .order('id', ascending: false); // ya da istediğin alana göre sırala
 

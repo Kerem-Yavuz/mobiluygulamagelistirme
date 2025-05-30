@@ -28,7 +28,7 @@ class _InsertTestPageState extends State<InsertPage> {
     final supabase = Supabase.instance.client;
 
     try {
-      final response = await supabase.from('ID').insert({
+      final response = await supabase.from('Complaints').insert({
         'user_id': userId,
         'title': title,
         'description': description,
