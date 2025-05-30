@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,16 +26,24 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Map<String, dynamic>? profile;
-
+  Map<String, dynamic>? firebaseData;
   Future<void> fetchUserDataFromSupabase() async {
     final prefs = await SharedPreferences.getInstance();
     final uid = prefs.getString('uid');
+
 
     if (uid == null) {
       print("UID shared_preferences içinde bulunamadı.");
       return;
     }
 
+    final docSnapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+    if (docSnapshot.exists) {
+      setState(() {
+        firebaseData =  docSnapshot.data();
+      });
+    }
     final supabase = Supabase.instance.client;
 
     try {
@@ -81,9 +90,9 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 8),
             Text("Email: ${profile!['email']}"),
-            Text("Doğum Yeri: ${profile!['dogum_yeri']}"),
-            Text("Doğum Tarihi: ${profile!['dogum_tarihi']}"),
-            Text("Yaşam Yeri: ${profile!['yasam_yeri']}"),
+            Text('Doğum Yeri: ${firebaseData?['dogumYeri']}'),
+            Text('Doğum Tarihi: ${firebaseData?['dogumTarihi']}'),
+            Text('Yaşadığı İl: ${firebaseData?['yasadigiIl']}'),
           ],
         ),
       ),

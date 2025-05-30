@@ -6,10 +6,12 @@ import 'package:mobiluygulamagelistirme/profile.dart';
 import 'package:mobiluygulamagelistirme/insert_screen.dart';
 import 'package:mobiluygulamagelistirme/complaints.dart';
 import 'package:mobiluygulamagelistirme/settings.dart';
+import 'package:mobiluygulamagelistirme/signup.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'SplashScreen.dart';
 import 'ThemeNotifier.dart';
 
 
@@ -168,9 +170,10 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: themeNotifier.isDarkTheme ? ThemeMode.dark : ThemeMode.light,
-      initialRoute: '/login',
+      home: SplashScreen(),
       routes: {
         '/newcomplaint': (context) => InsertPage(),
+        '/signup': (context) => SignUpPage(),
         '/newcomplaintlist': (context) => ComplaintsPage(),
         '/settings': (context) => SettingsPage(),
         '/login': (context) => LoginScreen(),

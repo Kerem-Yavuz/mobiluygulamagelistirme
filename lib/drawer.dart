@@ -71,9 +71,9 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.logout),
             title: Text('logout'.tr()),
-            onTap: () async { // This will delete token in cookie for logout and then it will go to the login page
+            onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
-              await prefs.remove('cookie');
+              await prefs.clear(); // Tüm verileri siler
               Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
             },
           ),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -7,6 +8,7 @@ import 'package:mobiluygulamagelistirme/appbar.dart';
 import 'package:mobiluygulamagelistirme/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 // Login screen widget
 class LoginScreen extends StatefulWidget {
@@ -39,6 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
     final user = userCredential.user;
     final profile = userCredential.additionalUserInfo?.profile;
+    final isNewUser = userCredential.additionalUserInfo?.isNewUser ?? false;
 
     if (user != null && profile != null) {
       final prefs = await SharedPreferences.getInstance();
@@ -49,12 +52,42 @@ class _LoginScreenState extends State<LoginScreen> {
       await prefs.setString('firstName', profile['given_name'] ?? '');
       await prefs.setString('lastName', profile['family_name'] ?? '');
       await prefs.setString('photoURL', profile['picture'] ?? user.photoURL ?? '');
+
+      final supabase = Supabase.instance.client;
+
+      if (isNewUser) {
+
+        Navigator.pushReplacementNamed(context, '/newcomplaintlist');
+
+        final extraInfo = await showExtraInfoDialog(context);
+        await supabase.from('Profil_Bilgileri').insert({
+          'isim': profile['given_name'] ?? '',
+          'soyisim': profile['family_name'] ?? '',
+          'email': user.email ?? '',
+          'uid': user.uid,
+        });
+
+
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'dogumYeri': extraInfo?['dogumYeri'] ?? '',
+          'dogumTarihi': extraInfo?['dogumTarihi'] ?? '',
+          'yasadigiIl': extraInfo?['yasadigiIl'] ?? '',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+
+        print('✅ New user inserted with extra info into Supabase And Firebase');
+      } else {
+        print("Not new User");
+      }
     }
+
     Future.delayed(Duration(milliseconds: 300), () {
-      Navigator.pushReplacementNamed(context, '/profile');
+      Navigator.pushReplacementNamed(context, '/newcomplaintlist');
     });
+
     return userCredential;
   }
+
 
   Future<UserCredential> signInWithGitHub() async {
     try {
@@ -63,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final userCredential = await FirebaseAuth.instance.signInWithProvider(githubProvider);
       final user = userCredential.user;
       final profile = userCredential.additionalUserInfo?.profile;
-
+      final isNewUser = userCredential.additionalUserInfo?.isNewUser ?? false;
       if (user != null && profile != null) {
         final prefs = await SharedPreferences.getInstance();
 
@@ -73,12 +106,33 @@ class _LoginScreenState extends State<LoginScreen> {
         await prefs.setString('firstName', profile['given_name'] ?? '');
         await prefs.setString('lastName', profile['family_name'] ?? '');
         await prefs.setString('photoURL', profile['avatar_url'] ?? user.photoURL ?? '');
+
+        final supabase = Supabase.instance.client;
+
+        if (isNewUser) {
+          Navigator.pushReplacementNamed(context, '/newcomplaintlist');
+          final extraInfo = await showExtraInfoDialog(context);
+            await supabase.from('Profil_Bilgileri').insert({
+              'isim': profile['given_name'] ?? '',
+              'soyisim': profile['family_name'] ?? '',
+              'email': user.email ?? '',
+              'uid': user.uid,
+            });
+
+
+            await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+              'dogumYeri': extraInfo?['dogumYeri'] ?? '',
+              'dogumTarihi': extraInfo?['dogumTarihi'] ?? '',
+              'yasadigiIl': extraInfo?['yasadigiIl'] ?? '',
+              'createdAt': FieldValue.serverTimestamp(),
+            });
+
+            print('✅ New user inserted with extra info into Supabase And Firebase');
+        } else {
+          print("Not new User");
+        }
+
       }
-
-      Future.delayed(const Duration(milliseconds: 300), () {
-        Navigator.pushReplacementNamed(context, '/profile');
-      });
-
       return userCredential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
@@ -134,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
         await prefs.setString('photoURL', user.photoURL ?? '');
       }
 
-      Navigator.pushReplacementNamed(context, '/profile');
+      Navigator.pushReplacementNamed(context, '/newcomplaintlist');
     } on FirebaseAuthException catch (e) {
       String message = 'Giriş başarısız';
 
@@ -227,7 +281,9 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 20),
 
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/signup');
+                },
                 child: Text('signup'.tr()),
               ),
             ],
@@ -237,3 +293,95 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+
+Future<Map<String, String>?> showExtraInfoDialog(BuildContext context) async {
+  final _formKey = GlobalKey<FormState>();
+
+  DateTime? _selectedDate;
+  final _dogumYeriController = TextEditingController();
+  final _dogumTarihiController = TextEditingController();
+  final _yasadigiIlController = TextEditingController();
+
+  return showDialog<Map<String, String>>(
+    context: context,
+    barrierDismissible: false, // Dışarı tıklayınca kapanmasın, zorunlu doldursun
+    builder: (context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text('Ek Bilgi Gerekli'),
+            content: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormField(
+                      controller: _dogumYeriController,
+                      decoration: InputDecoration(labelText: 'Doğum Yeri'),
+                      validator: (val) => val == null || val.isEmpty ? 'Doğum Yeri Girin' : null,
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _dogumTarihiController,
+                      decoration: InputDecoration(
+                        labelText: 'Doğum Tarihi',
+                        suffixIcon: Icon(Icons.calendar_today),
+                      ),
+                      readOnly: true,
+                      validator: (val) => val == null || val.isEmpty ? 'Doğum Tarihi Girin' : null,
+                      onTap: () async {
+                        final picked = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime(2000, 1, 1),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime.now(),
+                          locale: const Locale('tr'),
+                        );
+                        if (picked != null) {
+                          setState(() {
+                            _selectedDate = picked;
+                            _dogumTarihiController.text =
+                            "${picked.day.toString().padLeft(2, '0')}.${picked.month.toString().padLeft(2, '0')}.${picked.year}";
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _yasadigiIlController,
+                      decoration: InputDecoration(labelText: 'Yaşadığı İl'),
+                      validator: (val) => val == null || val.isEmpty ? 'İl Girin' : null,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(null); // iptal edildiğinde null döner
+                },
+                child: Text('Atla'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.of(context).pop({
+                      'dogumYeri': _dogumYeriController.text.trim(),
+                      'dogumTarihi': _dogumTarihiController.text.trim(),
+                      'yasadigiIl': _yasadigiIlController.text.trim(),
+                    });
+                  }
+                },
+                child: Text('Kaydet'),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
+
