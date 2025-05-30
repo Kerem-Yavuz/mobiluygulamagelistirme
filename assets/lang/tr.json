@@ -1,4 +1,22 @@
 {
   "settings": "Ayarlar",
-  "dark_theme": "Karanlık Tema"
+  "dark_theme": "Karanlık Tema",
+  "menu": "Menü",
+  "addcomplaint": "Şikayet Oluştur",
+  "complaints": "Şikayetler",
+  "profile": "Profil",
+  "logout": "Çıkış Yap",
+  "settings": "Ayarlar",
+  "samecreditential": "Bu e-posta başka bir giriş yöntemiyle kayıtlıdır. Lütfen o yöntemle giriş yapın.",
+  "providecreditentials": "Lütfen E-Posta ve Şifre Girin",
+  "nouser": "Kullanıcı Bulunamadı",
+  "wrongpass": "Yanlış Şifre",
+  "invalidemailformat": "Geçersiz Eposta Formatı",
+  "welcome": "Hoş Geldiniz",
+  "username": "Kullanıcı Adı",
+  "password": "Şifre",
+  "login": "Giriş Yap",
+  "logingoogle": "Google ile Giriş Yap",
+  "logingithub": "Github ile Giriş Yap",
+  "signup": "Kayıt Ol"
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -84,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Bu e-posta başka bir giriş yöntemiyle kayıtlı. Lütfen o yöntemle giriş yapın.',
+              'samecreditential'.tr(),
             ),
           ),
         );
@@ -112,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Lütfen e-posta ve şifre girin.')),
+        SnackBar(content: Text('providecreditentials'.tr())),
       );
       return;
     }
@@ -138,11 +139,11 @@ class _LoginScreenState extends State<LoginScreen> {
       String message = 'Giriş başarısız';
 
       if (e.code == 'user-not-found') {
-        message = 'Bu e-posta ile kayıtlı bir kullanıcı yok.';
+        message = 'nouser'.tr();
       } else if (e.code == 'wrong-password') {
-        message = 'Şifre yanlış.';
+        message = 'wrongpass'.tr();
       } else if (e.code == 'invalid-email') {
-        message = 'Geçersiz e-posta formatı.';
+        message = 'invalidemailformat'.tr();
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -156,70 +157,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
 
-  // Function to login
-  Future<void> _login() async {
-    final String username = _usernameController.text;
-    final String password = _passwordController.text;
-
-    // checks if empty or not
-    if (username.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Kullanıcı Adı ve şifre boş olamaz')),
-      );
-      return;
-    }
-
-    // API endpoint for login
-    final Uri url = Uri.parse("${BASE_URL}/login/check?username=$username&password=$password");
-
-    try {
-      // Sending GET request to the server
-      final response = await http.get(url);
-      print(response);
-
-      // If login is successful
-      if (response.statusCode == 200) {
-        // Save cookie from response headers
-        String? cookie = response.headers['set-cookie'];
-        if (cookie != null) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setString("cookie", cookie); // Store the cookie locally
-          print(prefs.getString('cookie'));
-        }
-
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Giriş başarılı!')),
-        );
-
-        Future.delayed(Duration(milliseconds: 300), () {
-          Navigator.pushReplacementNamed(context, '/complaint');
-        });
-      } else {
-        // Show failure message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Giriş başarısız!')),
-        );
-      }
-    } catch (e) {
-      // Show connection error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Bağlantı hatası!')),
-      );
-    }
-  }
-
-  // Function to get headers with stored cookie
-  Future<Map<String, String>> _getHeaders() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? cookie = prefs.getString("cookie");
-
-    return {
-      "Content-Type": "application/json",
-      if (cookie != null) "Cookie": cookie, // Add cookie if possible
-    };
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -232,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Hoş Geldiniz',
+                'welcome'.tr(),
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -241,8 +178,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
               TextField(
                 controller: _usernameController,
-                decoration: const InputDecoration(
-                  labelText: 'Kullanıcı Adı',
+                decoration: InputDecoration(
+                  labelText: 'username'.tr(),
                   prefixIcon: Icon(Icons.person),
                 ),
               ),
@@ -251,8 +188,8 @@ class _LoginScreenState extends State<LoginScreen> {
               TextField(
                 controller: _passwordController,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Şifre',
+                decoration: InputDecoration(
+                  labelText: 'password'.tr(),
                   prefixIcon: Icon(Icons.lock),
                 ),
               ),
@@ -261,14 +198,14 @@ class _LoginScreenState extends State<LoginScreen> {
               ElevatedButton.icon(
                 onPressed: signInWithEmailAndPassword,
                 icon: const Icon(Icons.email),
-                label: const Text('E-posta ile Giriş Yap'),
+                label: Text("login".tr()),
               ),
               const SizedBox(height: 15),
 
               ElevatedButton.icon(
                 onPressed: signInWithGoogle,
                 icon: const Icon(Icons.g_mobiledata),
-                label: const Text('Google ile Giriş Yap'),
+                label: Text('logingoogle'.tr()),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   foregroundColor: Theme.of(context).colorScheme.onSurface,
@@ -280,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ElevatedButton.icon(
                 onPressed: signInWithGitHub,
                 icon: const Icon(Icons.code),
-                label: const Text('GitHub ile Giriş Yap'),
+                label: Text('logingithub'.tr()),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   foregroundColor: Theme.of(context).colorScheme.onSurface,
@@ -291,7 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               TextButton(
                 onPressed: () {},
-                child: const Text('Hesabınız yok mu? Kayıt olun'),
+                child: Text('signup'.tr()),
               ),
             ],
           ),

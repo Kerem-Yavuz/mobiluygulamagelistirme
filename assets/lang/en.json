@@ -1,4 +1,22 @@
 {
   "settings": "Settings",
-  "dark_theme": "Dark Theme"
+  "dark_theme": "Dark Theme",
+  "menu": "Menu",
+  "addcomplaint": "Add Complaint",
+  "complaints": "Complaints",
+  "profile": "Profile",
+  "logout": "Logout",
+  "settings": "Settings",
+  "samecreditential": "This email is registered with another login method. Please log in with that method.",
+  "providecreditentials": "Please provide E-Mail and Password",
+  "nouser": "This user does not exists",
+  "wrongpass": "Wrong Password",
+  "invalidemailformat": "Invalid Email Format",
+  "welcome": "Welcome",
+  "username": "Username",
+  "password": "Password",
+  "login": "Login",
+  "logingoogle": "Login with Google",
+  "logingithub": "Login with Github",
+  "signup": "Signup"
 }

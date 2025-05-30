@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +19,7 @@ class MyDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
+            decoration: BoxDecoration(color: const Color(0xFFA63D40)),
             child: Row(
               children: [
                 FutureBuilder<Uint8List?>(
@@ -35,7 +37,7 @@ class MyDrawer extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: Text(
-                    "Menü",
+                    "menu".tr(),
                     style: TextStyle(fontSize: 24),
                   ),
                 ),
@@ -44,7 +46,7 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.warning_amber),
-            title: Text("Şikayet Et Yeni"),
+            title: Text('addcomplaint'.tr()),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushReplacementNamed(context, '/newcomplaint');
@@ -52,7 +54,7 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.map),
-            title: Text("Şikayetler Yeni"),
+            title: Text('complaints'.tr()),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushReplacementNamed(context, '/newcomplaintlist');
@@ -60,7 +62,7 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.person),
-            title: Text("Profil"),
+            title: Text('profile'.tr()),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushReplacementNamed(context, '/profile');
@@ -68,7 +70,7 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.logout),
-            title: Text("Çıkış Yap"),
+            title: Text('logout'.tr()),
             onTap: () async { // This will delete token in cookie for logout and then it will go to the login page
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.remove('cookie');
@@ -77,7 +79,7 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.settings),
-            title: Text("Ayarlar"),
+            title: Text('settings'.tr()),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushReplacementNamed(context, '/settings');
