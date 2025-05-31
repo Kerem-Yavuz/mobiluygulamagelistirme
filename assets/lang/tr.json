@@ -13,7 +13,7 @@
   "wrongpass": "Yanlış Şifre",
   "invalidemailformat": "Geçersiz Eposta Formatı",
   "welcome": "Hoş Geldiniz",
-  "username": "Kullanıcı Adı",
+  "email": "Email",
   "password": "Şifre",
   "login": "Giriş Yap",
   "logingoogle": "Google ile Giriş Yap",
@@ -21,5 +21,13 @@
   "signup": "Kayıt Ol",
   "logoutquestion": "Çıkış Yapmak İstediğinize Emin Misiniz?",
   "approve": "Onayla",
-  "cancel": "İptal"
+  "cancel": "İptal",
+  "additionalinfo": "Ek Bilgi",
+  "birthplace": "Doğum Yeri",
+  "birthdate": "Doğum Tarihi",
+  "additionalinfoneeded": "Ek Bilgi Gerekli",
+  "livingplace": "Yaşadığı Yer",
+  "skip": "Atla",
+  "save": "Kaydet",
+  "loading": "Yükleniyor"
 }

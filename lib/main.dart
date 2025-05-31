@@ -13,6 +13,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'SplashScreen.dart';
 import 'ThemeNotifier.dart';
+import 'firebase_config.dart';
 
 
 final ThemeData darkTheme = ThemeData(
@@ -139,11 +140,13 @@ void main() async {
     url: 'https://rldxceqyinumedzfptnq.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZHhjZXF5aW51bWVkemZwdG5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MDQ3MTEsImV4cCI6MjA2NDA4MDcxMX0.ITkluOrezbUujAAbXbHftOb-R5F9L-QP9WO2UeycRss',
   );
-  await Firebase.initializeApp();
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp();
+  }
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('tr')],
-      path: 'assets/lang', // kendi yoluna göre ayarla
+      path: 'assets/lang', 
       fallbackLocale: const Locale('en'),
       child: ChangeNotifierProvider(
         create: (_) => ThemeNotifier(isDark),

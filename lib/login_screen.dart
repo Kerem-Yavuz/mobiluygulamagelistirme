@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,12 +20,13 @@ class _LoginScreenState extends State<LoginScreen> {
   // Controllers for input fields
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
+  bool isLoading = false;
 
   Future<UserCredential> signInWithGoogle() async {
+    setState(() => isLoading = true);
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
     if (googleUser == null) {
+      setState(() => isLoading = false);
       throw Exception('Google sign in cancelled');
     }
 
@@ -82,19 +84,31 @@ class _LoginScreenState extends State<LoginScreen> {
     Future.delayed(Duration(milliseconds: 300), () {
       Navigator.pushReplacementNamed(context, '/newcomplaintlist');
     });
-
+    setState(() => isLoading = false);
     return userCredential;
   }
 
 
-  Future<UserCredential> signInWithGitHub() async {
+  Future<UserCredential?> signInWithGitHub() async {
+    setState(() => isLoading = true);
     try {
       final githubProvider = GithubAuthProvider();
+      UserCredential? userCredential;
+      githubProvider.addScope('read:user');
+      githubProvider.setCustomParameters({
+        'allow_signup': 'false',
+      });
 
-      final userCredential = await FirebaseAuth.instance.signInWithProvider(githubProvider);
-      final user = userCredential.user;
-      final profile = userCredential.additionalUserInfo?.profile;
-      final isNewUser = userCredential.additionalUserInfo?.isNewUser ?? false;
+        if (kIsWeb) {
+          userCredential = await FirebaseAuth.instance.signInWithPopup(githubProvider);
+        } else {
+          userCredential = await FirebaseAuth.instance.signInWithProvider(githubProvider);
+        }
+
+
+      final user = userCredential?.user;
+      final profile = userCredential?.additionalUserInfo?.profile;
+      final isNewUser = userCredential?.additionalUserInfo?.isNewUser ?? false;
       if (user != null && profile != null) {
         final prefs = await SharedPreferences.getInstance();
 
@@ -132,8 +146,10 @@ class _LoginScreenState extends State<LoginScreen> {
         }
 
       }
+      setState(() => isLoading = false);
       return userCredential;
     } on FirebaseAuthException catch (e) {
+      setState(() => isLoading = false);
       if (e.code == 'account-exists-with-different-credential') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -151,6 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       rethrow;
     } catch (e) {
+      setState(() => isLoading = false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Beklenmeyen bir hata oluştu: ${e.toString()}'),
@@ -161,6 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signInWithEmailAndPassword() async {
+    setState(() => isLoading = true);
     final String email = _usernameController.text.trim();
     final String password = _passwordController.text;
 
@@ -168,6 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('providecreditentials'.tr())),
       );
+      setState(() => isLoading = false);
       return;
     }
 
@@ -186,9 +205,10 @@ class _LoginScreenState extends State<LoginScreen> {
         await prefs.setString('lastName', '');
         await prefs.setString('photoURL', user.photoURL ?? '');
       }
-
+      setState(() => isLoading = false);
       Navigator.pushReplacementNamed(context, '/newcomplaintlist');
     } on FirebaseAuthException catch (e) {
+      setState(() => isLoading = false);
       String message = 'Giriş başarısız';
 
       if (e.code == 'user-not-found') {
@@ -203,6 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
         SnackBar(content: Text(message)),
       );
     } catch (e) {
+      setState(() => isLoading = false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Bir hata oluştu: ${e.toString()}')),
       );
@@ -250,15 +271,27 @@ class _LoginScreenState extends State<LoginScreen> {
 
               ElevatedButton.icon(
                 onPressed: signInWithEmailAndPassword,
-                icon: const Icon(Icons.email),
-                label: Text("login".tr()),
+                icon: isLoading
+                    ? SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(strokeWidth: 2, color: Theme.of(context).colorScheme.onSurface),
+                )
+                    : const Icon(Icons.email),
+                label: isLoading ? Text('loading'.tr()+"...") : Text('login'.tr()),
               ),
               const SizedBox(height: 15),
 
               ElevatedButton.icon(
                 onPressed: signInWithGoogle,
-                icon: const Icon(Icons.g_mobiledata),
-                label: Text('logingoogle'.tr()),
+                icon: isLoading
+                    ? SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(strokeWidth: 2, color: Theme.of(context).colorScheme.onSurface),
+                )
+                    : const Icon(Icons.g_mobiledata),
+                label: isLoading ? Text('loading'.tr()+"...") : Text('logingoogle'.tr()),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   foregroundColor: Theme.of(context).colorScheme.onSurface,
@@ -269,8 +302,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
               ElevatedButton.icon(
                 onPressed: signInWithGitHub,
-                icon: const Icon(Icons.code),
-                label: Text('logingithub'.tr()),
+                icon: isLoading
+                    ? SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                )
+                    : const Icon(Icons.code),
+                label: isLoading ? Text('loading'.tr()+"...") : Text('logingithub'.tr()),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   foregroundColor: Theme.of(context).colorScheme.onSurface,
@@ -309,7 +351,7 @@ Future<Map<String, String>?> showExtraInfoDialog(BuildContext context) async {
       return StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
-            title: Text('Ek Bilgi Gerekli'),
+            title: Text('additionalinfoneeded'.tr()),
             content: Form(
               key: _formKey,
               child: SingleChildScrollView(
@@ -318,14 +360,14 @@ Future<Map<String, String>?> showExtraInfoDialog(BuildContext context) async {
                   children: [
                     TextFormField(
                       controller: _dogumYeriController,
-                      decoration: InputDecoration(labelText: 'Doğum Yeri'),
+                      decoration: InputDecoration(labelText: 'birthplace'.tr()),
                       validator: (val) => val == null || val.isEmpty ? 'Doğum Yeri Girin' : null,
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: _dogumTarihiController,
                       decoration: InputDecoration(
-                        labelText: 'Doğum Tarihi',
+                        labelText: 'birthplace'.tr(),
                         suffixIcon: Icon(Icons.calendar_today),
                       ),
                       readOnly: true,
@@ -350,7 +392,7 @@ Future<Map<String, String>?> showExtraInfoDialog(BuildContext context) async {
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: _yasadigiIlController,
-                      decoration: InputDecoration(labelText: 'Yaşadığı İl'),
+                      decoration: InputDecoration(labelText: 'livingplace'.tr()),
                       validator: (val) => val == null || val.isEmpty ? 'İl Girin' : null,
                     ),
                   ],
@@ -362,7 +404,7 @@ Future<Map<String, String>?> showExtraInfoDialog(BuildContext context) async {
                 onPressed: () {
                   Navigator.of(context).pop(null); // iptal edildiğinde null döner
                 },
-                child: Text('Atla'),
+                child: Text('skip'.tr()),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -374,7 +416,7 @@ Future<Map<String, String>?> showExtraInfoDialog(BuildContext context) async {
                     });
                   }
                 },
-                child: Text('Kaydet'),
+                child: Text('save'.tr()),
               ),
             ],
           );

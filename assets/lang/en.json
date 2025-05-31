@@ -24,5 +24,10 @@
   "cancel": "Cancel",
   "additionalinfo": "Additional Info",
   "birthplace": "Birth Place",
-  "birthdate": "Birth Date"
+  "birthdate": "Birth Date",
+  "additionalinfoneeded": "Additional Info Needed",
+  "livingplace": "Place of Residence",
+  "skip": "Skip",
+  "save": "Save",
+  "loading": "Loading"
 }
