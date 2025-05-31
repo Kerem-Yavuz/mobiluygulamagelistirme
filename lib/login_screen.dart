@@ -1,11 +1,8 @@
-import 'dart:convert';
+import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mobiluygulamagelistirme/appbar.dart';
-import 'package:mobiluygulamagelistirme/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -63,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
         await supabase.from('Profil_Bilgileri').insert({
           'isim': profile['given_name'] ?? '',
           'soyisim': profile['family_name'] ?? '',
+          'profil_resmi': profile['picture'] ?? '',
           'email': user.email ?? '',
           'uid': user.uid,
         });
@@ -115,6 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
             await supabase.from('Profil_Bilgileri').insert({
               'isim': profile['given_name'] ?? '',
               'soyisim': profile['family_name'] ?? '',
+              'profil_resmi': profile['avatar_url'] ?? '',
               'email': user.email ?? '',
               'uid': user.uid,
             });
@@ -233,7 +232,7 @@ class _LoginScreenState extends State<LoginScreen> {
               TextField(
                 controller: _usernameController,
                 decoration: InputDecoration(
-                  labelText: 'username'.tr(),
+                  labelText: 'email'.tr(),
                   prefixIcon: Icon(Icons.person),
                 ),
               ),

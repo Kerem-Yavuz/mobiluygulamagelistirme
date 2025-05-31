@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'appbar.dart';
-import 'drawer.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+import 'base_page.dart';
+
+
 
 
 class ProfilePage extends StatefulWidget {
@@ -30,7 +31,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> fetchUserDataFromSupabase() async {
     final prefs = await SharedPreferences.getInstance();
     final uid = prefs.getString('uid');
-
 
     if (uid == null) {
       print("UID shared_preferences içinde bulunamadı.");
@@ -72,17 +72,18 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     }
 
-    return Scaffold(
-      appBar: MyAppBar(title: 'profil'),
-      drawer : MyDrawer(),
-      body: Padding(
+    return BasePage(
+      title: "profile".tr(),
+      child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            /*CircleAvatar(
+            CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage(profile!['profil_resmi']),
-            ),*/
+              backgroundImage: (profile?['profil_resmi'] != null && profile!['profil_resmi'].toString().isNotEmpty)
+                  ? NetworkImage(profile!['profil_resmi'])
+                  : NetworkImage("https://static-00.iconduck.com/assets.00/avatar-default-icon-2048x2048-h6w375ur.png"),
+            ),
             const SizedBox(height: 16),
             Text(
               "${profile!['isim']} ${profile!['soyisim']}",

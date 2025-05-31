@@ -18,5 +18,8 @@
   "login": "Giriş Yap",
   "logingoogle": "Google ile Giriş Yap",
   "logingithub": "Github ile Giriş Yap",
-  "signup": "Kayıt Ol"
+  "signup": "Kayıt Ol",
+  "logoutquestion": "Çıkış Yapmak İstediğinize Emin Misiniz?",
+  "approve": "Onayla",
+  "cancel": "İptal"
 }

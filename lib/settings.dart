@@ -4,8 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ThemeNotifier.dart';
-import 'appbar.dart';
-import 'drawer.dart';
+import 'base_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -21,15 +20,13 @@ class SettingsPage extends StatelessWidget {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     final isDarkTheme = themeNotifier.isDarkTheme;
     final currentLocale = context.locale;
-    print('settings.tr() => ${'settings'.tr()}');
-    return Scaffold(
-      appBar: MyAppBar(title: "settings".tr()),
-      drawer: MyDrawer(),
-      body: Padding(
+
+    return BasePage(
+      title: 'settings'.tr(),
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Theme switch
             SwitchListTile(
               title: Text('dark_theme'.tr()),
               value: isDarkTheme,
@@ -38,7 +35,6 @@ class SettingsPage extends StatelessWidget {
               },
             ),
             const SizedBox(height: 20),
-            // Language selector
             DropdownButton<Locale>(
               value: currentLocale,
               onChanged: (Locale? locale) {

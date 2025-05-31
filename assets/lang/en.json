@@ -13,10 +13,16 @@
   "wrongpass": "Wrong Password",
   "invalidemailformat": "Invalid Email Format",
   "welcome": "Welcome",
-  "username": "Username",
+  "email": "Email",
   "password": "Password",
   "login": "Login",
   "logingoogle": "Login with Google",
   "logingithub": "Login with Github",
-  "signup": "Signup"
+  "signup": "Signup",
+  "logoutquestion": "Are You Sure You Want To Logout",
+  "approve": "Confirm",
+  "cancel": "Cancel",
+  "additionalinfo": "Additional Info",
+  "birthplace": "Birth Place",
+  "birthdate": "Birth Date"
 }

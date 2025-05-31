@@ -100,13 +100,13 @@ class _SignUpPageState extends State<SignUpPage> {
             children: [
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: InputDecoration(labelText: 'email'.tr()),
                 validator: (val) => val!.isEmpty ? 'Email girin' : null,
               ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: _passwordController,
-                decoration: const InputDecoration(labelText: 'Şifre'),
+                decoration: InputDecoration(labelText: 'password'.tr()),
                 obscureText: true,
                 validator: (val) => val!.length < 6 ? 'En az 6 karakter' : null,
               ),
@@ -114,18 +114,18 @@ class _SignUpPageState extends State<SignUpPage> {
 
               /// Genişleyebilen Alan
               ExpansionTile(
-                title: const Text('Ek Bilgiler'),
+                title: Text('additionalinfo'.tr()),
                 initiallyExpanded: _expandExtraFields,
                 children: [
                   TextFormField(
                     controller: _dogumYeriController,
-                    decoration: const InputDecoration(labelText: 'Doğum Yeri'),
+                    decoration: InputDecoration(labelText: 'birthplace'.tr()),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
                     controller: _dogumTarihiController,
-                    decoration: const InputDecoration(
-                      labelText: 'Doğum Tarihi',
+                    decoration: InputDecoration(
+                      labelText: 'birthdate'.tr(),
                       suffixIcon: Icon(Icons.calendar_today),
                     ),
                     readOnly: true,

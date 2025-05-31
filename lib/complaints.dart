@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'appbar.dart';
+import 'base_page.dart';
 import 'drawer.dart';
 
 class ComplaintsPage extends StatefulWidget {
@@ -36,10 +38,9 @@ class _ComplaintListPageState extends State<ComplaintsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MyAppBar(title: "Complaints"),
-      drawer: MyDrawer(),
-      body: ListView.builder(
+    return BasePage(
+      title: 'complaints'.tr(),
+      child: ListView.builder(
         itemCount: complaints.length,
         itemBuilder: (context, index) {
           final complaint = complaints[index];

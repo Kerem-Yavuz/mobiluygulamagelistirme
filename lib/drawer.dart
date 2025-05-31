@@ -8,6 +8,39 @@ import 'ResimSaglayici.dart';
 
 class MyDrawer extends StatelessWidget {
 
+  void _navigate(BuildContext context, String route){
+    Navigator.pop(context);
+    if(ModalRoute.of(context)?.settings.name != route){
+      Navigator.pushReplacementNamed(context, route);
+    }
+  }
+
+  void _logout(BuildContext context){
+    showDialog(context: context,
+        builder: (BuildContext context){
+          return AlertDialog(
+            title: Text('logout'.tr()),
+            content: Text("logoutquestion".tr()),
+            actions: [
+              TextButton(onPressed:() async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.clear(); // Tüm verileri siler
+                Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
+              },
+                  child: Text('approve'.tr())
+
+              ),
+              TextButton(onPressed:() {
+                Navigator.of(context).pop();
+              },
+                  child: Text('cancel'.tr())
+
+              ),
+            ],
+          );
+        }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,33 +81,28 @@ class MyDrawer extends StatelessWidget {
             leading: Icon(Icons.warning_amber),
             title: Text('addcomplaint'.tr()),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/newcomplaint');
+              _navigate(context, '/newcomplaint');
             },
           ),
           ListTile(
             leading: Icon(Icons.map),
             title: Text('complaints'.tr()),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/newcomplaintlist');
+              _navigate(context, '/newcomplaintlist');
             },
           ),
           ListTile(
             leading: Icon(Icons.person),
             title: Text('profile'.tr()),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/profile');
+              _navigate(context, '/profile');
             },
           ),
           ListTile(
             leading: Icon(Icons.logout),
             title: Text('logout'.tr()),
             onTap: () async {
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              await prefs.clear(); // Tüm verileri siler
-              Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
+             _logout(context);
             },
           ),
           ListTile(
