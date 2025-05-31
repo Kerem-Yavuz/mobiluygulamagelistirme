@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobiluygulamagelistirme/login_screen.dart';
 import 'package:mobiluygulamagelistirme/profile.dart';
@@ -140,8 +141,13 @@ void main() async {
     url: 'https://rldxceqyinumedzfptnq.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZHhjZXF5aW51bWVkemZwdG5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MDQ3MTEsImV4cCI6MjA2NDA4MDcxMX0.ITkluOrezbUujAAbXbHftOb-R5F9L-QP9WO2UeycRss',
   );
-  if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp();
+  if (kIsWeb) {
+    // Web için options ile başlat
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } else {
+    await Firebase.initializeApp(); // Androidde options google-services ten çekiliyor
   }
   runApp(
     EasyLocalization(

@@ -367,7 +367,7 @@ Future<Map<String, String>?> showExtraInfoDialog(BuildContext context) async {
                     TextFormField(
                       controller: _dogumTarihiController,
                       decoration: InputDecoration(
-                        labelText: 'birthplace'.tr(),
+                        labelText: 'birthdate'.tr(),
                         suffixIcon: Icon(Icons.calendar_today),
                       ),
                       readOnly: true,
