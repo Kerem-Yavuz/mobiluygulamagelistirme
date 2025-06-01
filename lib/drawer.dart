@@ -106,7 +106,12 @@ class _MyDrawerState extends State<MyDrawer> {
             onTap: () => _navigate(context, '/newcomplaint'),
           ),
           ListTile(
-            leading: const Icon(Icons.map),
+          leading: const Icon(Icons.map),
+          title: Text('complaintmap'.tr()),
+          onTap: () => _navigate(context, '/mappage'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.list),
             title: Text('complaints'.tr()),
             onTap: () => _navigate(context, '/newcomplaintlist'),
           ),

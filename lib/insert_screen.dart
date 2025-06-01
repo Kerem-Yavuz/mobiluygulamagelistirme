@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'appbar.dart';
@@ -67,35 +68,44 @@ class _InsertTestPageState extends State<InsertPage> {
           body: SafeArea(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
+                // Başlık satırı
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
                         "Haritadan konum seçin",
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.close, color: Colors.white),
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                    ],
-                  ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
                 ),
+
+                // Harita alanı - döndürülmüş ve genişletilmiş
                 Expanded(
-                  child: Transform.rotate(
-                    angle: pi / 2, //to fix image rotation
-                    child: TappableImage(
-                      onCoordinateSelected: (coords) {
-                        tempCoords = coords;
-                      },
+                  child: RotatedBox(
+                    quarterTurns: 0, // pi/2 dönüş
+                    child: SizedBox.expand(
+                      child: TappableImage(
+                        initialPoint: tempCoords,
+                        onCoordinateSelected: (coords) {
+                          tempCoords = coords;
+                        },
+                      ),
                     ),
                   ),
                 ),
+
+                // Alt bilgi ve buton
                 Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         tempCoords != null
@@ -129,6 +139,9 @@ class _InsertTestPageState extends State<InsertPage> {
       },
     );
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -168,11 +181,13 @@ class _InsertTestPageState extends State<InsertPage> {
                     );
                     return;
                   }
+                  final prefs = await SharedPreferences.getInstance();
+                  final userId = prefs.getString('uid') ?? '';
 
-                  final userId = Supabase.instance.client.auth.currentUser?.id ?? 'test-user';
                   final title = titleController.text;
                   final description = descriptionController.text;
-                  const imageUrl = 'assets/zaim_map.png'; // static image
+
+                  const imageUrl = ''; // Image URL Will be Added Here After Supabase Implementation
 
                   await insertData(
                     userId: userId,

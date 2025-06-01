@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobiluygulamagelistirme/login_screen.dart';
+import 'package:mobiluygulamagelistirme/mapPage.dart';
 import 'package:mobiluygulamagelistirme/profile.dart';
 import 'package:mobiluygulamagelistirme/insert_screen.dart';
 import 'package:mobiluygulamagelistirme/complaints.dart';
@@ -181,6 +182,7 @@ class MyApp extends StatelessWidget {
       themeMode: themeNotifier.isDarkTheme ? ThemeMode.dark : ThemeMode.light,
       home: SplashScreen(),
       routes: {
+        '/mappage': (context) => ComplaintsMapPage(),
         '/newcomplaint': (context) => InsertPage(),
         '/signup': (context) => SignUpPage(),
         '/newcomplaintlist': (context) => ComplaintsPage(),
