@@ -30,5 +30,7 @@
   "skip": "Skip",
   "save": "Save",
   "loading": "Loading",
-  "complaintmap": "Complaint Map"
+  "complaintmap": "Complaint Map",
+  "name": "Name",
+  "surname": "Surname"
 }

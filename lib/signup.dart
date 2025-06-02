@@ -48,7 +48,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
       final supabase = Supabase.instance.client;
       try {
-        final insertResponse = await supabase.from('Profil_Bilgileri').insert({
+        await supabase.from('Profil_Bilgileri').insert({
           'isim': _nameController.text.trim() ?? "",
           'soyisim': _surnameController.text.trim() ?? "",
           'email': _emailController.text.trim(),

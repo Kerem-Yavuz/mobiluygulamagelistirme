@@ -30,5 +30,7 @@
   "skip": "Atla",
   "save": "Kaydet",
   "loading": "Yükleniyor",
-  "complaintmap": "Şikayet Haritası"
+  "complaintmap": "Şikayet Haritası",
+  "name": "Name",
+  "surname": "Surname"
 }
