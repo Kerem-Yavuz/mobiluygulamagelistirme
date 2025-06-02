@@ -2,9 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'appbar.dart';
 import 'base_page.dart';
-import 'drawer.dart';
+import 'DetailsPage.dart'; // <- Bunu eklediğine emin ol
 
 class ComplaintsPage extends StatefulWidget {
   @override
@@ -24,9 +23,9 @@ class _ComplaintListPageState extends State<ComplaintsPage> {
   Future<void> fetchComplaints() async {
     try {
       final response = await supabase
-          .from('Complaints') // tablo adını kendi projenle eşleştir
+          .from('Complaints')
           .select()
-          .order('id', ascending: false); // ya da istediğin alana göre sırala
+          .order('id', ascending: false);
 
       setState(() {
         complaints = response;
@@ -44,17 +43,23 @@ class _ComplaintListPageState extends State<ComplaintsPage> {
         itemCount: complaints.length,
         itemBuilder: (context, index) {
           final complaint = complaints[index];
-
-          // JSON alanı: coordinate
           final coordinate = complaint['coordinate'];
           final lat = coordinate?['lat'] ?? 'Yok';
           final lng = coordinate?['lng'] ?? 'Yok';
 
           return Card(
-            margin: EdgeInsets.all(8),
+            margin: const EdgeInsets.all(8),
             child: ListTile(
               title: Text(complaint['title'] ?? 'Başlıksız'),
-              subtitle: Text('${complaint['description'] ?? ''}\nKoordinat: ($lat, $lng)'),
+              onTap: () {
+                final id = complaint['id'].toString(); // id'yi al
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ComplaintDetailPage(id: id),
+                  ),
+                );
+              },
               trailing: complaint['image_url'] != null
                   ? Image.network(
                 complaint['image_url'],

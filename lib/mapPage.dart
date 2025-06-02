@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mobiluygulamagelistirme/base_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'mapDetailsPage.dart';
+import 'DetailsPage.dart';
 import 'map.dart';
 
 class ComplaintsMapPage extends StatefulWidget {
