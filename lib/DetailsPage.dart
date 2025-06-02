@@ -88,8 +88,6 @@ class ComplaintDetailPage extends StatelessWidget {
                           ),
                         const SizedBox(height: 16),
                         if (lat != null && lng != null) ...[
-                          Text('Koordinatlar: (${lat.toStringAsFixed(2)}, ${lng.toStringAsFixed(2)})',
-                              style: TextStyle(color: Colors.grey[600])),
                           const SizedBox(height: 12),
                           ElevatedButton(
                             onPressed: () {

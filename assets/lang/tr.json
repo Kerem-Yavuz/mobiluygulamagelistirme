@@ -32,5 +32,11 @@
   "loading": "Yükleniyor",
   "complaintmap": "Şikayet Haritası",
   "name": "Name",
-  "surname": "Surname"
+  "surname": "Surname",
+  "inserttitle": "Başlık",
+  "insertComplaint": "Açıklama",
+  "insertOpenMap": "Haritayı Aç",
+  "insertTakePhoto": "Fotoğraf Çek",
+  "insertChooseLocation": "Lütfen haritadan bir konum seçin"
+
 }

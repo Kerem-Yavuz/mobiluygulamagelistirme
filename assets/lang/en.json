@@ -32,5 +32,10 @@
   "loading": "Loading",
   "complaintmap": "Complaint Map",
   "name": "Name",
-  "surname": "Surname"
+  "surname": "Surname",
+  "inserttitle": "Title",
+  "insertComplaint": "Complaint",
+  "insertOpenMap": "Open map",
+  "insertTakePhoto": "Take Photo",
+  "insertChooseLocation": "Please Choose a Location"
 }

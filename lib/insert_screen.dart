@@ -171,17 +171,17 @@ class _InsertTestPageState extends State<InsertPage> {
             children: [
               TextField(
                 controller: titleController,
-                decoration: const InputDecoration(labelText: 'Başlık'),
+                decoration:  InputDecoration(labelText: 'inserttitle'.tr()),
               ),
               TextField(
                 controller: descriptionController,
-                decoration: const InputDecoration(labelText: 'Açıklama'),
+                decoration:  InputDecoration(labelText: 'Complaint'.tr()),
               ),
               const SizedBox(height: 16),
 
               ElevatedButton(
                 onPressed: () => _showMapPicker(context),
-                child: const Text("Haritayı Aç"),
+                child:  Text("Haritayı Aç"),
               ),
 
               if (selectedCoordinates != null)
