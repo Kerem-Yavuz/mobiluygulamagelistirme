@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'DBHelper.dart';
 import 'base_page.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -87,6 +88,20 @@ class _ProfilePageState extends State<ProfilePage> {
       })
         .eq('uid', uid);
 
+
+    final Map<String, dynamic> userData = {
+      'uid': uid,
+      'email': emailController.text.trim() ?? '',
+      'name': "${nameController.text.trim()} ${surnameController.text.trim()}" ?? ' ',
+      'firstName':  nameController.text.trim() ?? '',
+      'lastName': surnameController.text.trim() ?? "",
+      'dogumYeri': dogumYeriController.text.trim() ?? '',
+      'dogumTarihi': _selectedDate ?? '',
+      'yasadigiIl': yasadigiIlController.text.trim() ?? '',
+    };
+
+    await DBHelper().updateUser(userData);
+
     setState(() {
       isEditing = false;
       profile!['isim'] = nameController.text;
@@ -142,6 +157,8 @@ class _ProfilePageState extends State<ProfilePage> {
       await prefs.setString('photoURL', publicUrl);
 
       print('Public URL: $publicUrl');
+
+      await DBHelper.updateProfilePhoto(uid, publicUrl);
 
       setState(() {
         profile!['profil_resmi'] = publicUrl;

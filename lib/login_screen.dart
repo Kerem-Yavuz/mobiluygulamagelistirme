@@ -8,6 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'DBHelper.dart';
+
 // Login screen widget
 class LoginScreen extends StatefulWidget {
   @override
@@ -75,9 +77,39 @@ class _LoginScreenState extends State<LoginScreen> {
           'createdAt': FieldValue.serverTimestamp(),
         });
 
-        print('✅ New user inserted with extra info into Supabase And Firebase');
+        final Map<String, dynamic> userData = {
+          'uid': user.uid,
+          'email': user.email ?? '',
+          'name': (profile['name'] ?? ''),
+          'firstName': (profile['given_name'] ?? ''),
+          'lastName': (profile['family_name'] ?? ''),
+          'photoURL': (profile['picture'] ?? ''),
+          'dogumYeri': extraInfo?['dogumYeri'] ?? '',
+          'dogumTarihi': extraInfo?['dogumTarihi'] ?? '',
+          'yasadigiIl': extraInfo?['yasadigiIl'] ?? '',
+          'createdAt': DateTime.now().toIso8601String(),
+        };
+
+        await DBHelper().insertUser(userData);
+
+        print('New user inserted with extra info into Supabase And Firebase');
       } else {
-        print("Not new User");
+        bool exists = await DBHelper.userExists(user.uid);
+        if (!exists) {
+          final Map<String, dynamic> userData = {
+            'uid': user.uid,
+            'email': user.email ?? '',
+            'name': (profile['name'] ?? ''),
+            'firstName': (profile['given_name'] ?? ''),
+            'lastName': (profile['family_name'] ?? ''),
+            'photoURL': (profile['picture'] ?? ''),
+            'createdAt': DateTime.now().toIso8601String(),
+          };
+
+          await DBHelper().insertUser(userData);
+        } else {
+          print('Kullanıcı var');
+        }
       }
     }
 
@@ -140,9 +172,37 @@ class _LoginScreenState extends State<LoginScreen> {
               'createdAt': FieldValue.serverTimestamp(),
             });
 
-            print('✅ New user inserted with extra info into Supabase And Firebase');
+          final Map<String, dynamic> userData = {
+            'uid': user.uid,
+            'email': user.email ?? '',
+            'name': (profile['name'] ?? ''),
+            'firstName': (profile['given_name'] ?? ''),
+            'lastName': (profile['family_name'] ?? ''),
+            'photoURL': (profile['picture'] ?? ''),
+            'dogumYeri': extraInfo?['dogumYeri'] ?? '',
+            'dogumTarihi': extraInfo?['dogumTarihi'] ?? '',
+            'yasadigiIl': extraInfo?['yasadigiIl'] ?? '',
+            'createdAt': DateTime.now().toIso8601String(),
+          };
+
+          await DBHelper().insertUser(userData);
+
+            print('New user inserted with extra info into Supabase And Firebase');
         } else {
-          print("Not new User");
+          bool exists = await DBHelper.userExists(user.uid);
+          if (!exists) {
+            final Map<String, dynamic> userData = {
+              'uid': user.uid,
+              'email': user.email ?? '',
+              'name': (profile['name'] ?? ''),
+              'firstName': (profile['given_name'] ?? ''),
+              'lastName': (profile['family_name'] ?? ''),
+              'photoURL': (profile['picture'] ?? ''),
+              'createdAt': DateTime.now().toIso8601String(),
+            };
+
+            await DBHelper().insertUser(userData);
+          }
         }
 
       }
@@ -204,6 +264,19 @@ class _LoginScreenState extends State<LoginScreen> {
         await prefs.setString('firstName', '');
         await prefs.setString('lastName', '');
         await prefs.setString('photoURL', user.photoURL ?? '');
+      }
+
+      bool exists = await DBHelper.userExists(user!.uid);
+      if (!exists) {
+        final Map<String, dynamic> userData = {
+          'uid': user.uid,
+          'email': user.email ?? '',
+          'name': (user.displayName ?? ''),   
+          'photoURL': (user.photoURL ?? ''),
+          'createdAt': DateTime.now().toIso8601String(),
+        };
+
+        await DBHelper().insertUser(userData);
       }
       setState(() => isLoading = false);
       Navigator.pushReplacementNamed(context, '/newcomplaintlist');

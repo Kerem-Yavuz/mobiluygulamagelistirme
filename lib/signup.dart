@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobiluygulamagelistirme/appbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'DBHelper.dart';
+
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
@@ -59,6 +61,21 @@ class _SignUpPageState extends State<SignUpPage> {
       } catch (e) {
         print('Supabase insert error: $e');
       }
+
+      final Map<String, dynamic> userData = {
+        'uid': uid,
+        'email': _emailController.text.trim() ?? '',
+        'name': "${_nameController.text.trim()} ${_surnameController.text.trim()}" ?? ' ',
+        'firstName':  _nameController.text.trim() ?? '',
+        'lastName': _surnameController.text.trim() ?? "",
+        'photoURL': '',
+        'dogumYeri': _dogumYeriController.text.trim() ?? '',
+        'dogumTarihi': _selectedDate ?? '',
+        'yasadigiIl': _yasadigiIlController.text.trim() ?? '',
+        'createdAt': DateTime.now().toIso8601String(),
+      };
+
+      await DBHelper().insertUser(userData);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Kayıt başarılı')),
