@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'base_page.dart';
+import '../../core/base/base_page.dart';
 import 'DetailsPage.dart';
 
 class ComplaintsPage extends StatefulWidget {
@@ -68,8 +68,23 @@ class _ComplaintListPageState extends State<ComplaintsPage> {
                   width: 60,
                   height: 60,
                   fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      ),
+                    );
+                  },
                   errorBuilder: (context, error, stackTrace) =>
-                  const Icon(Icons.broken_image),
+                  const Icon(Icons.broken_image, size: 60),
                 ),
               )
                   : const Icon(Icons.image_not_supported),

@@ -8,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'DBHelper.dart';
+import '../../utils/DBHelper.dart';
 
 // Login screen widget
 class LoginScreen extends StatefulWidget {
@@ -271,7 +271,7 @@ class _LoginScreenState extends State<LoginScreen> {
         final Map<String, dynamic> userData = {
           'uid': user.uid,
           'email': user.email ?? '',
-          'name': (user.displayName ?? ''),   
+          'name': (user.displayName ?? ''),
           'photoURL': (user.photoURL ?? ''),
           'createdAt': DateTime.now().toIso8601String(),
         };

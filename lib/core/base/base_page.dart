@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'appbar.dart';
-import 'drawer.dart';
+import '../widgets/appbar.dart';
+import '../widgets/drawer.dart';
 
 class BasePage extends StatelessWidget {
   final String title;

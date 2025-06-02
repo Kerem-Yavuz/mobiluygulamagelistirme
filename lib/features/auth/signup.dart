@@ -2,10 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mobiluygulamagelistirme/appbar.dart';
+import 'package:mobiluygulamagelistirme/core/widgets/appbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'DBHelper.dart';
+import '../../utils/DBHelper.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});

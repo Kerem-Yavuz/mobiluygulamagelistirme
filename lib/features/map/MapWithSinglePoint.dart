@@ -1,8 +1,9 @@
 
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobiluygulamagelistirme/appbar.dart';
+import 'package:mobiluygulamagelistirme/core/widgets/appbar.dart';
 
 class MapWithSinglePoint extends StatelessWidget {
   final double normalizedLat; // from 0 to 1
@@ -20,7 +21,7 @@ class MapWithSinglePoint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(title: "MapDetail"),
+      appBar: MyAppBar(title: 'complaintdetails'.tr()),
       body: LayoutBuilder(
         builder: (context, constraints) {
           final containerWidth = constraints.maxWidth;

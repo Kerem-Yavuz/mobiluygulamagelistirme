@@ -6,8 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'DBHelper.dart';
-import 'base_page.dart';
+import '../../utils/DBHelper.dart';
+import '../../core/base/base_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

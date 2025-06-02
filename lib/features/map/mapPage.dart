@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:mobiluygulamagelistirme/base_page.dart';
+import 'package:mobiluygulamagelistirme/core/base/base_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'DetailsPage.dart';
+import '../complaints/DetailsPage.dart';
 import 'map.dart';
 
 class ComplaintsMapPage extends StatefulWidget {
@@ -37,12 +37,12 @@ class _ComplaintsMapPageState extends State<ComplaintsMapPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(8.0),
             child:
             Center(
               child: Text(
-                'Detaylar için tıklayın',
+                'clickfordetails'.tr(),
                 style: TextStyle(
                   fontSize: 13,
                   color: Colors.grey,

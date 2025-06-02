@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:mobiluygulamagelistirme/appbar.dart';
+import 'package:mobiluygulamagelistirme/core/widgets/appbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'MapWithSinglePoint.dart';
+import '../map/MapWithSinglePoint.dart';
 
 class ComplaintDetailPage extends StatelessWidget {
   final String id;
@@ -95,8 +95,18 @@ class ComplaintDetailPage extends StatelessWidget {
                           child: Image.network(
                             imageUrl,
                             fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              );
+                            },
                             errorBuilder: (context, error, stackTrace) =>
-                            const Text("Görsel yüklenemedi"),
+                            const Center(child: Text("Görsel yüklenemedi")),
                           ),
                         ),
 

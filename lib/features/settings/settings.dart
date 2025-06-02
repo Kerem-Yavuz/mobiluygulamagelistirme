@@ -3,8 +3,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'ThemeNotifier.dart';
-import 'base_page.dart';
+import '../../core/theme/ThemeNotifier.dart';
+import '../../core/base/base_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);

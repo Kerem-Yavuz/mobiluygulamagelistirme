@@ -36,11 +36,9 @@ class MapWithPoints extends StatelessWidget {
         final offsetX = (containerWidth - displayedWidth) / 2;
         final offsetY = (containerHeight - displayedHeight) / 2;
 
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 60.0),
-          child: InteractiveViewer(
-            panEnabled: true,
-            scaleEnabled: true,
+        return InteractiveViewer(
+          panEnabled: true,
+          scaleEnabled: true,
           maxScale: 5.0,
           minScale: 1.0,
           child: SizedBox(
@@ -53,15 +51,16 @@ class MapWithPoints extends StatelessWidget {
                   top: offsetY,
                   width: displayedWidth,
                   height: displayedHeight,
-                  child: Image.network(
-                    'https://rldxceqyinumedzfptnq.supabase.co/storage/v1/object/public/images/zaim_map.png',
-                    fit: BoxFit.fill,
-                    errorBuilder: (context, error, stackTrace) => const Center(child: Text('Görsel yüklenemedi')),
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const Center(child: CircularProgressIndicator());
-                    },
-                  )
+                    child: Image.network(
+                      'https://rldxceqyinumedzfptnq.supabase.co/storage/v1/object/public/images/zaim_map.png',
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) =>
+                      const Center(child: Text('Görsel yüklenemedi')),
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return const Center(child: CircularProgressIndicator());
+                      },
+                    ),
                 ),
                 ...points.map((point) {
                   final dx = (point['dx'] as double) * displayedWidth + offsetX;
@@ -83,8 +82,8 @@ class MapWithPoints extends StatelessWidget {
               ],
             ),
           ),
-        ),
         );
+
       },
     );
   }

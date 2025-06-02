@@ -2,20 +2,20 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mobiluygulamagelistirme/login_screen.dart';
-import 'package:mobiluygulamagelistirme/mapPage.dart';
-import 'package:mobiluygulamagelistirme/profile.dart';
-import 'package:mobiluygulamagelistirme/insert_screen.dart';
-import 'package:mobiluygulamagelistirme/complaints.dart';
-import 'package:mobiluygulamagelistirme/settings.dart';
-import 'package:mobiluygulamagelistirme/signup.dart';
+import 'package:mobiluygulamagelistirme/features/auth/login_screen.dart';
+import 'package:mobiluygulamagelistirme/features/map/mapPage.dart';
+import 'package:mobiluygulamagelistirme/features/profile/profile.dart';
+import 'package:mobiluygulamagelistirme/features/complaints/insert_screen.dart';
+import 'package:mobiluygulamagelistirme/features/complaints/complaints.dart';
+import 'package:mobiluygulamagelistirme/features/settings/settings.dart';
+import 'package:mobiluygulamagelistirme/features/auth/signup.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'SplashScreen.dart';
-import 'ThemeNotifier.dart';
-import 'firebase_config.dart';
+import 'features/auth/SplashScreen.dart';
+import 'core/theme/ThemeNotifier.dart';
+import 'core/config/firebase_config.dart';
 
 
 final ThemeData darkTheme = ThemeData(

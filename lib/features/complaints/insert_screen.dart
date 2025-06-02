@@ -5,10 +5,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'appbar.dart';
-import 'base_page.dart';
-import 'drawer.dart';
-import 'tappable_image.dart';
+import '../../core/widgets/appbar.dart';
+import '../../core/base/base_page.dart';
+import '../../core/widgets/drawer.dart';
+import '../map/widgets/tappable_image.dart';
 
 class InsertPage extends StatefulWidget {
   const InsertPage({super.key});
@@ -49,6 +49,9 @@ class _InsertTestPageState extends State<InsertPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('snackbarsent'.tr())),
       );
+      Future.delayed(Duration(milliseconds: 300), () {
+        Navigator.pushReplacementNamed(context, '/newcomplaintlist');
+      });
     } catch (e) {
       print('Hata oluştu: $e');
       if (!mounted) return;
@@ -186,6 +189,7 @@ class _InsertTestPageState extends State<InsertPage> {
                 controller: titleController,
                 decoration: InputDecoration(labelText: 'inserttitle'.tr()),
               ),
+              const SizedBox(height: 8),
               TextField(
                 controller: descriptionController,
                 decoration: InputDecoration(labelText: 'Complaint'.tr()),
@@ -193,7 +197,14 @@ class _InsertTestPageState extends State<InsertPage> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => _showMapPicker(context),
-                child: Text("insertOpenMap".tr()),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min, // So the button size fits content nicely
+                  children: [
+                    Icon(Icons.map),              // The map icon
+                    SizedBox(width: 8),           // Some space between icon and text
+                    Text("insertOpenMap".tr()),
+                  ],
+                ),
               ),
               if (selectedCoordinates != null)
                 Padding(
