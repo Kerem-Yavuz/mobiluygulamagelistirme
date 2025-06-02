@@ -46,5 +46,6 @@
   "konum:": "Location:",
   "Seçilen konum:": "Selected location:",
   "Edit": "Edit",
-  "clickfordetails": "Click For Details"
+  "clickfordetails": "Click For Details",
+  "showlocation": "Show location"
 }
