@@ -1,6 +1,7 @@
-import 'dart:math';
+import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -20,6 +21,10 @@ class _InsertTestPageState extends State<InsertPage> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   Map<String, double>? selectedCoordinates;
+
+  File? _imageFile;  // Store picked image file
+
+  final ImagePicker _picker = ImagePicker();
 
   Future<void> insertData({
     required String userId,
@@ -50,6 +55,21 @@ class _InsertTestPageState extends State<InsertPage> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Hata oluştu: $e')),
+      );
+    }
+  }
+
+  Future<void> _pickImage() async {
+    try {
+      final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+      if (pickedFile != null) {
+        setState(() {
+          _imageFile = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Resim alınamadı: $e')),
       );
     }
   }
@@ -140,9 +160,6 @@ class _InsertTestPageState extends State<InsertPage> {
     );
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return BasePage(
@@ -161,10 +178,12 @@ class _InsertTestPageState extends State<InsertPage> {
                 decoration: const InputDecoration(labelText: 'Açıklama'),
               ),
               const SizedBox(height: 16),
+
               ElevatedButton(
                 onPressed: () => _showMapPicker(context),
                 child: const Text("Haritayı Aç"),
               ),
+
               if (selectedCoordinates != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
@@ -172,7 +191,29 @@ class _InsertTestPageState extends State<InsertPage> {
                     'Seçilen konum: ${selectedCoordinates!['lat']?.toStringAsFixed(4)}, ${selectedCoordinates!['lng']?.toStringAsFixed(4)}',
                   ),
                 ),
+
+              const SizedBox(height: 16),
+
+              // New ElevatedButton to take picture
+              ElevatedButton.icon(
+                icon: const Icon(Icons.camera_alt),
+                label: const Text('Fotoğraf Çek'),
+                onPressed: _pickImage,
+              ),
+
+              if (_imageFile != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Image.file(
+                    _imageFile!,
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+
               const SizedBox(height: 20),
+
               ElevatedButton(
                 onPressed: () async {
                   if (selectedCoordinates == null) {
@@ -187,7 +228,8 @@ class _InsertTestPageState extends State<InsertPage> {
                   final title = titleController.text;
                   final description = descriptionController.text;
 
-                  const imageUrl = ''; // Image URL Will be Added Here After Supabase Implementation
+                  String imageUrl = '';
+
 
                   await insertData(
                     userId: userId,
