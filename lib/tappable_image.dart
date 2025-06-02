@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class TappableImage extends StatefulWidget {
   final Function(Map<String, double>) onCoordinateSelected;
-  final Map<String, double>? initialPoint; // lat, lng yüzde şeklinde
+  final Map<String, double>? initialPoint;
 
   const TappableImage({
     super.key,
@@ -19,10 +19,8 @@ class _TappableImageState extends State<TappableImage> {
   final TransformationController _transformationController = TransformationController();
   final GlobalKey _imageKey = GlobalKey();
 
-  // Seçilen nokta yüzde olarak tutulacak (0..1)
   Offset? _selectedPointPercent;
 
-  // Orijinal resim boyutları (px)
   static const double imageOriginalWidth = 717.0;
   static const double imageOriginalHeight = 1452.0;
 
@@ -51,7 +49,6 @@ class _TappableImageState extends State<TappableImage> {
 
     final containerSize = box.size;
 
-    // Burada, container'ın kendisi değil, onu içeren parent container boyutları lazım
     final parentBox = context.findRenderObject() as RenderBox?;
     if (parentBox == null) return;
     final parentSize = parentBox.size;
@@ -69,16 +66,11 @@ class _TappableImageState extends State<TappableImage> {
       displayedHeight = displayedWidth / imageRatio;
     }
 
-    // Resmin container içindeki offseti
     final offsetX = (parentSize.width - displayedWidth) / 2;
     final offsetY = (parentSize.height - displayedHeight) / 2;
 
-    // Önce tap pozisyonundan offset çıkarıyoruz
     final adjustedPosition = Offset(tapPosition.dx - offsetX, tapPosition.dy - offsetY);
 
-
-
-    // Şimdi transformedPosition, resmin koordinatlarında, yani 0..displayedWidth/Height aralığında olmalı
     if (adjustedPosition.dx < 0 ||
         adjustedPosition.dy < 0 ||
         adjustedPosition.dx > displayedWidth ||
@@ -86,8 +78,7 @@ class _TappableImageState extends State<TappableImage> {
       return;
     }
 
-
-    final dxPercent = adjustedPosition.dx/ displayedWidth ;
+    final dxPercent = adjustedPosition.dx / displayedWidth;
     final dyPercent = adjustedPosition.dy / displayedHeight;
 
     setState(() {
@@ -122,7 +113,6 @@ class _TappableImageState extends State<TappableImage> {
               displayedHeight = displayedWidth / imageRatio;
             }
 
-            // Resmin container içinde konumu (boşluklar)
             final offsetX = (containerWidth - displayedWidth) / 2;
             final offsetY = (containerHeight - displayedHeight) / 2;
 
@@ -133,19 +123,23 @@ class _TappableImageState extends State<TappableImage> {
                   top: offsetY,
                   width: displayedWidth,
                   height: displayedHeight,
-                  child: Image.asset(
-                    'assets/zaim_map.png',
+                  child: Image.network(
+                    'https://rldxceqyinumedzfptnq.supabase.co/storage/v1/object/public/images/zaim_map.png',
                     key: _imageKey,
                     fit: BoxFit.fill,
+                    errorBuilder: (context, error, stackTrace) =>
+                    const Center(child: Text('Görsel yüklenemedi')),
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(child: CircularProgressIndicator());
+                    },
                   ),
                 ),
-
                 if (_selectedPointPercent != null)
                   Positioned(
                     left: offsetX + _selectedPointPercent!.dx * displayedWidth - 12,
                     top: offsetY + _selectedPointPercent!.dy * displayedHeight - 24,
                     child: const Icon(Icons.location_on, color: Color(0xFFA63D40)),
-
                   ),
               ],
             );

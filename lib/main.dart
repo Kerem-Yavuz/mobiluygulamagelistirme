@@ -72,6 +72,15 @@ final ThemeData darkTheme = ThemeData(
       borderRadius: BorderRadius.horizontal(right: Radius.circular(16)),
     ),
   ),
+  snackBarTheme: SnackBarThemeData(
+    backgroundColor: const Color(0xFFA63D40),
+    contentTextStyle: const TextStyle(color: Colors.white),
+    actionTextColor: Colors.white70,
+    behavior: SnackBarBehavior.floating,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+  ),
 );
 
 final ThemeData lightTheme = ThemeData(
@@ -126,6 +135,15 @@ final ThemeData lightTheme = ThemeData(
     elevation: 16,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.horizontal(right: Radius.circular(16)),
+    ),
+  ),
+  snackBarTheme: SnackBarThemeData(
+    backgroundColor: const Color(0xFFA63D40),
+    contentTextStyle: const TextStyle(color: Colors.white),
+    actionTextColor: Colors.white70,
+    behavior: SnackBarBehavior.floating,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
     ),
   ),
 );

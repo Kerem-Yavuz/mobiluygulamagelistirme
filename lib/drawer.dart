@@ -94,7 +94,7 @@ class _MyDrawerState extends State<MyDrawer> {
             currentAccountPicture: CircleAvatar(
               backgroundImage: (profileImageUrl != null && profileImageUrl!.isNotEmpty)
                   ? NetworkImage(profileImageUrl!)
-                  : NetworkImage("https://static-00.iconduck.com/assets.00/avatar-default-icon-2048x2048-h6w375ur.png"),
+                  : NetworkImage("https://rldxceqyinumedzfptnq.supabase.co/storage/v1/object/public/images//defaultAvatar.png"),
             ),
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,

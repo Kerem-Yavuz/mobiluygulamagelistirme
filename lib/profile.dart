@@ -173,16 +173,40 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            GestureDetector(
-              onTap: isEditing ? uploadProfileImage : null,
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: (profile?['profil_resmi'] != null &&
-                    profile!['profil_resmi'].toString().isNotEmpty)
-                    ? NetworkImage(profile!['profil_resmi']) as ImageProvider
-                    : const NetworkImage(
-                    "https://static-00.iconduck.com/assets.00/avatar-default-icon-2048x2048-h6w375ur.png"),
-              ),
+            Stack(
+              children: [
+                GestureDetector(
+                  onTap: uploadProfileImage,
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: (profile?['profil_resmi'] != null &&
+                        profile!['profil_resmi'].toString().isNotEmpty)
+                        ? NetworkImage(profile!['profil_resmi']) as ImageProvider
+                        : const NetworkImage(
+                        "https://rldxceqyinumedzfptnq.supabase.co/storage/v1/object/public/images//defaultAvatar.png"),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: uploadProfileImage,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      padding: const EdgeInsets.all(4),
+                      child: const Icon(
+                        Icons.edit,
+                        size: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 24),
             isEditing

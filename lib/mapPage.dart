@@ -30,29 +30,49 @@ class _ComplaintsMapPageState extends State<ComplaintsMapPage> {
       complaints = List<Map<String, dynamic>>.from(response);
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return BasePage(
       title: 'complaintmap'.tr(),
-      child: MapWithPoints(
-        points: complaints.map((complaint) {
-          final coord = complaint['coordinate'] as Map<String, dynamic>;
-          return {
-            'id': complaint['id'],
-            'dx': coord['lng'] as double,
-            'dy': coord['lat'] as double,
-          };
-        }).toList(),
-        onPointTapped: (id) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => ComplaintDetailPage(id: id.toString()),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child:
+            Center(
+              child: Text(
+                'Detaylar için tıklayın',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey,
+                ),
+              ),
             ),
-          );
-        },
+          ),
+          Expanded(
+            child: MapWithPoints(
+              points: complaints.map((complaint) {
+                final coord = complaint['coordinate'] as Map<String, dynamic>;
+                return {
+                  'id': complaint['id'],
+                  'dx': coord['lng'] as double,
+                  'dy': coord['lat'] as double,
+                };
+              }).toList(),
+              onPointTapped: (id) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ComplaintDetailPage(id: id.toString()),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
+
 }

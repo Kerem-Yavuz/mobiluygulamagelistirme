@@ -53,10 +53,15 @@ class MapWithPoints extends StatelessWidget {
                   top: offsetY,
                   width: displayedWidth,
                   height: displayedHeight,
-                  child: Image.asset(
-                    'assets/zaim_map.png',
+                  child: Image.network(
+                    'https://rldxceqyinumedzfptnq.supabase.co/storage/v1/object/public/images/zaim_map.png',
                     fit: BoxFit.fill,
-                  ),
+                    errorBuilder: (context, error, stackTrace) => const Center(child: Text('Görsel yüklenemedi')),
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(child: CircularProgressIndicator());
+                    },
+                  )
                 ),
                 ...points.map((point) {
                   final dx = (point['dx'] as double) * displayedWidth + offsetX;

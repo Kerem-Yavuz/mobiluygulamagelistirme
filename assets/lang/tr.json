@@ -43,8 +43,9 @@
   "SnackBarChoose": "Lütfen bir konum seçin",
   "PictureNotTaken": "Resim alınamadı",
   "LocationNotPicked": "Henüz konum seçilmedi",
-  "konum:": "konum:",
+  "konum:": "Konum:",
   "Seçilen konum:": "Seçilen konum:",
-  "Edit": "duzenle"
+  "Edit": "Düzenle",
+  "clickfordetails": "Detaylar İçin Tıklayın"
 
 }
