@@ -2,19 +2,30 @@
 
 ## Giriş İçin Bilgiler:
 
-Kullanıcı Adı: hakan.gencoglu
+Kullanıcı Adı: hakan.gencoglu@gmail.com
 Şifre: 123456
 
 ## Sayfaların Görevleri ve İçerikleri:
 
-login_screen.dart -> Login ekranı
-complaint.dart -> şikayet yazma yeri
-complaint_data -> şikayet verilerinin apiden çekildiği yer
-appbar.dart -> sayfalar için appbar
-complaint_list_page -> şikayetleri göstermek için
-constants -> uygulamadaki sabit değerlerin daha kolay ulaşılabilmesi için 
-drawer -> sayfalar için drawer 
-ResimSaglayici -> resim çekmeye yarayan kısım
+appbar -> Sayfalar için özel appbar tasarımı ve yapısı
+base_page -> Sayfa yapısı için genel base widget, tüm sayfalarda ortak tasarım
+complaints -> Şikayet yazma ve şikayetlerle ilgili işlemler
+DetailsPage -> Şikayet detaylarını gösteren sayfa
+drawer -> Uygulama için yan menü
+firebase -> Firebase bağlantı ve işlemleri
+firebase_config -> Firebase konfigürasyon ayarları
+insert_screen -> şikayet ekleme ekranı
+login_screen -> Kullanıcı giriş ekranı
+map -> Harita ile ilgili genel işlemler
+mapPage -> Harita sayfası, harita gösterimi
+MapWithSinglePoin -> Harita üzerinde tek bir nokta gösterimi
+profile -> Kullanıcı profil sayfası
+ResimSaglayici -> Resim çekme ve seçme işlemleri için yardımcı sınıf
+settings -> Ayarlar sayfası
+signup -> Kullanıcı kayıt ekranı
+SplashScreen -> Uygulama açılış ekranı
+tappable_image -> Harita üzerinde koordinat seçmek için
+ThemeNotifier -> Tema değiştirme ve bildirim yönetimi
 
 
 ### Logo Apisi : https://cdn-icons-png.flaticon.com/512/1997/1997401.png
