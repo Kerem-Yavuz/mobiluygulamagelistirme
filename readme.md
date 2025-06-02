@@ -54,7 +54,9 @@ ThemeNotifier -> Tema değiştirme ve bildirim yönetimi
 ## Grup Üyeleri
 
 Abdullah Kerem Yavuz -> Login Screen + server tarafı
+
 Kerem Yavuz -> Appbar, Drawer + server tarafı
+
 Taha İslam Güven -> Şikayet ile ilgili sayfalar + Genel düzenleme 
 
 
