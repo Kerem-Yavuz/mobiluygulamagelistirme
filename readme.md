@@ -8,23 +8,41 @@ Kullanıcı Adı: hakan.gencoglu@gmail.com
 ## Sayfaların Görevleri ve İçerikleri:
 
 appbar -> Sayfalar için özel appbar tasarımı ve yapısı
+
 base_page -> Sayfa yapısı için genel base widget, tüm sayfalarda ortak tasarım
+
 complaints -> Şikayet yazma ve şikayetlerle ilgili işlemler
+
 DetailsPage -> Şikayet detaylarını gösteren sayfa
+
 drawer -> Uygulama için yan menü
+
 firebase -> Firebase bağlantı ve işlemleri
+
 firebase_config -> Firebase konfigürasyon ayarları
+
 insert_screen -> şikayet ekleme ekranı
+
 login_screen -> Kullanıcı giriş ekranı
+
 map -> Harita ile ilgili genel işlemler
+
 mapPage -> Harita sayfası, harita gösterimi
+
 MapWithSinglePoin -> Harita üzerinde tek bir nokta gösterimi
+
 profile -> Kullanıcı profil sayfası
+
 ResimSaglayici -> Resim çekme ve seçme işlemleri için yardımcı sınıf
+
 settings -> Ayarlar sayfası
+
 signup -> Kullanıcı kayıt ekranı
+
 SplashScreen -> Uygulama açılış ekranı
+
 tappable_image -> Harita üzerinde koordinat seçmek için
+
 ThemeNotifier -> Tema değiştirme ve bildirim yönetimi
 
 
