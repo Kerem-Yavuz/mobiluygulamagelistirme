@@ -21,8 +21,7 @@ class _InsertTestPageState extends State<InsertPage> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   Map<String, double>? selectedCoordinates;
-
-  File? _imageFile;  // Store picked image file
+  File? _imageFile;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -48,7 +47,7 @@ class _InsertTestPageState extends State<InsertPage> {
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(content: Text('snackbarsent'.tr())),
+        SnackBar(content: Text('snackbarsent'.tr())),
       );
     } catch (e) {
       print('Hata oluştu: $e');
@@ -74,6 +73,25 @@ class _InsertTestPageState extends State<InsertPage> {
     }
   }
 
+  Future<String> uploadComplaintImage(File imageFile, String userId) async {
+    final supabase = Supabase.instance.client;
+    final fileName = '${DateTime.now().millisecondsSinceEpoch}_$userId.png';
+    final filePath = 'complaint_images/$fileName';
+
+    try {
+      await supabase.storage
+          .from('images')
+          .upload(filePath, imageFile, fileOptions: const FileOptions(upsert: true));
+
+      final publicUrl = supabase.storage.from('images').getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (e) {
+      print("Resim yükleme hatası: $e");
+      throw Exception("Resim yüklenemedi.");
+    }
+  }
+
   void _showMapPicker(BuildContext context) {
     Map<String, double>? tempCoords = selectedCoordinates;
 
@@ -88,11 +106,10 @@ class _InsertTestPageState extends State<InsertPage> {
           body: SafeArea(
             child: Column(
               children: [
-                // Başlık satırı
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                     Padding(
+                    Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
                         "insertChooseLocation".tr(),
@@ -105,11 +122,9 @@ class _InsertTestPageState extends State<InsertPage> {
                     ),
                   ],
                 ),
-
-                // Harita alanı - döndürülmüş ve genişletilmiş
                 Expanded(
                   child: RotatedBox(
-                    quarterTurns: 0, // pi/2 dönüş
+                    quarterTurns: 0,
                     child: SizedBox.expand(
                       child: TappableImage(
                         initialPoint: tempCoords,
@@ -120,8 +135,6 @@ class _InsertTestPageState extends State<InsertPage> {
                     ),
                   ),
                 ),
-
-                // Alt bilgi ve buton
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                   child: Column(
@@ -143,11 +156,11 @@ class _InsertTestPageState extends State<InsertPage> {
                             Navigator.of(context).pop();
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                               SnackBar(content: Text("SnackBarChoose".tr())),
+                              SnackBar(content: Text("SnackBarChoose".tr())),
                             );
                           }
                         },
-                        child:  Text("approve".tr()),
+                        child: Text("approve".tr()),
                       ),
                     ],
                   ),
@@ -171,19 +184,17 @@ class _InsertTestPageState extends State<InsertPage> {
             children: [
               TextField(
                 controller: titleController,
-                decoration:  InputDecoration(labelText: 'inserttitle'.tr()),
+                decoration: InputDecoration(labelText: 'inserttitle'.tr()),
               ),
               TextField(
                 controller: descriptionController,
-                decoration:  InputDecoration(labelText: 'Complaint'.tr()),
+                decoration: InputDecoration(labelText: 'Complaint'.tr()),
               ),
               const SizedBox(height: 16),
-
               ElevatedButton(
                 onPressed: () => _showMapPicker(context),
-                child:  Text("insertOpenMap".tr()),
+                child: Text("insertOpenMap".tr()),
               ),
-
               if (selectedCoordinates != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
@@ -191,15 +202,12 @@ class _InsertTestPageState extends State<InsertPage> {
                     'Seçilen konum: ${selectedCoordinates!['lat']?.toStringAsFixed(4)}, ${selectedCoordinates!['lng']?.toStringAsFixed(4)}',
                   ),
                 ),
-
               const SizedBox(height: 16),
-
               ElevatedButton.icon(
-                icon:   Icon(Icons.camera_alt),
-                label:  Text('insertTakePhoto'.tr()),
+                icon: Icon(Icons.camera_alt),
+                label: Text('insertTakePhoto'.tr()),
                 onPressed: _pickImage,
               ),
-
               if (_imageFile != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
@@ -210,25 +218,32 @@ class _InsertTestPageState extends State<InsertPage> {
                     fit: BoxFit.cover,
                   ),
                 ),
-
               const SizedBox(height: 20),
-
               ElevatedButton(
                 onPressed: () async {
                   if (selectedCoordinates == null) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                       SnackBar(content: Text('insertChooseLocation'.tr())),
+                      SnackBar(content: Text('insertChooseLocation'.tr())),
                     );
                     return;
                   }
+
                   final prefs = await SharedPreferences.getInstance();
                   final userId = prefs.getString('uid') ?? '';
-
                   final title = titleController.text;
                   final description = descriptionController.text;
 
                   String imageUrl = '';
-
+                  if (_imageFile != null) {
+                    try {
+                      imageUrl = await uploadComplaintImage(_imageFile!, userId);
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Resim yüklenemedi: $e")),
+                      );
+                      return;
+                    }
+                  }
 
                   await insertData(
                     userId: userId,

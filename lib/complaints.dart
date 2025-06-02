@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'base_page.dart';
-import 'DetailsPage.dart'; // <- Bunu eklediğine emin ol
+import 'DetailsPage.dart';
 
 class ComplaintsPage extends StatefulWidget {
   @override
@@ -43,16 +43,16 @@ class _ComplaintListPageState extends State<ComplaintsPage> {
         itemCount: complaints.length,
         itemBuilder: (context, index) {
           final complaint = complaints[index];
-          final coordinate = complaint['coordinate'];
-          final lat = coordinate?['lat'] ?? 'Yok';
-          final lng = coordinate?['lng'] ?? 'Yok';
+          final imageUrl = complaint['image_url'];
+          final title = complaint['title'] ?? 'Başlıksız';
+          final id = complaint['id'].toString();
 
           return Card(
             margin: const EdgeInsets.all(8),
             child: ListTile(
-              title: Text(complaint['title'] ?? 'Başlıksız'),
+              contentPadding: const EdgeInsets.all(8),
+              title: Text(title),
               onTap: () {
-                final id = complaint['id'].toString(); // id'yi al
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -60,14 +60,19 @@ class _ComplaintListPageState extends State<ComplaintsPage> {
                   ),
                 );
               },
-              trailing: complaint['image_url'] != null
-                  ? Image.network(
-                complaint['image_url'],
-                width: 60,
-                height: 60,
-                fit: BoxFit.cover,
+              trailing: imageUrl != null && imageUrl.toString().isNotEmpty
+                  ? ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: Image.network(
+                  imageUrl,
+                  width: 60,
+                  height: 60,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.broken_image),
+                ),
               )
-                  : null,
+                  : const Icon(Icons.image_not_supported),
             ),
           );
         },

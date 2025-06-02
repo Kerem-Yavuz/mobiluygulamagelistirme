@@ -1,5 +1,4 @@
 {
-  "settings": "Ayarlar",
   "dark_theme": "Karanlık Tema",
   "menu": "Menü",
   "addcomplaint": "Şikayet Oluştur",
@@ -46,6 +45,7 @@
   "konum:": "Konum:",
   "Seçilen konum:": "Seçilen konum:",
   "Edit": "Düzenle",
-  "clickfordetails": "Detaylar İçin Tıklayın"
+  "clickfordetails": "Detaylar İçin Tıklayın",
+  "showlocation": "Konum göster"
 
 }
