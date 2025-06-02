@@ -260,7 +260,7 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 24),
             ElevatedButton.icon(
               icon: Icon(isEditing ? Icons.save : Icons.edit),
-              label: Text(isEditing ? "Kaydet" : "Düzenle"),
+              label: Text(isEditing ? "save".tr() : "Edit".tr()),
               onPressed: () {
                 if (isEditing) {
                   saveProfileChanges();

@@ -31,12 +31,20 @@
   "save": "Kaydet",
   "loading": "Yükleniyor",
   "complaintmap": "Şikayet Haritası",
-  "name": "Name",
-  "surname": "Surname",
+  "name": "Ad",
+  "surname": "soyadı",
   "inserttitle": "Başlık",
   "insertComplaint": "Açıklama",
   "insertOpenMap": "Haritayı Aç",
   "insertTakePhoto": "Fotoğraf Çek",
-  "insertChooseLocation": "Lütfen haritadan bir konum seçin"
+  "insertChooseLocation": "Lütfen haritadan bir konum seçin",
+  "Upload": "Veriyi Yükle",
+  "snackbarsent": "Sorun oluştu",
+  "SnackBarChoose": "Lütfen bir konum seçin",
+  "PictureNotTaken": "Resim alınamadı",
+  "LocationNotPicked": "Henüz konum seçilmedi",
+  "konum:": "konum:",
+  "Seçilen konum:": "Seçilen konum:",
+  "Edit": "duzenle"
 
 }

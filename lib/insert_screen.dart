@@ -48,13 +48,13 @@ class _InsertTestPageState extends State<InsertPage> {
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Veri başarıyla eklendi')),
+         SnackBar(content: Text('snackbarsent'.tr())),
       );
     } catch (e) {
       print('Hata oluştu: $e');
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Hata oluştu: $e')),
+        SnackBar(content: Text('SnackBarError: $e'.tr())),
       );
     }
   }
@@ -69,7 +69,7 @@ class _InsertTestPageState extends State<InsertPage> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Resim alınamadı: $e')),
+        SnackBar(content: Text('Resim alınamadı: $e'.tr())),
       );
     }
   }
@@ -92,10 +92,10 @@ class _InsertTestPageState extends State<InsertPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Padding(
+                     Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
-                        "Haritadan konum seçin",
+                        "insertChooseLocation".tr(),
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
@@ -129,8 +129,8 @@ class _InsertTestPageState extends State<InsertPage> {
                     children: [
                       Text(
                         tempCoords != null
-                            ? 'Konum: ${tempCoords!['lat']?.toStringAsFixed(4)}, ${tempCoords!['lng']?.toStringAsFixed(4)}'
-                            : 'Henüz konum seçilmedi',
+                            ? 'Konum: ${tempCoords!['lat']?.toStringAsFixed(4)}, ${tempCoords!['lng']?.toStringAsFixed(4)}'.tr()
+                            : 'LocationNotPicked'.tr(),
                         style: const TextStyle(color: Colors.white),
                       ),
                       const SizedBox(height: 10),
@@ -143,11 +143,11 @@ class _InsertTestPageState extends State<InsertPage> {
                             Navigator.of(context).pop();
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Lütfen bir konum seçin")),
+                               SnackBar(content: Text("SnackBarChoose".tr())),
                             );
                           }
                         },
-                        child: const Text("Tamam"),
+                        child:  Text("approve".tr()),
                       ),
                     ],
                   ),
@@ -181,7 +181,7 @@ class _InsertTestPageState extends State<InsertPage> {
 
               ElevatedButton(
                 onPressed: () => _showMapPicker(context),
-                child:  Text("Haritayı Aç"),
+                child:  Text("insertOpenMap".tr()),
               ),
 
               if (selectedCoordinates != null)
@@ -194,10 +194,9 @@ class _InsertTestPageState extends State<InsertPage> {
 
               const SizedBox(height: 16),
 
-              // New ElevatedButton to take picture
               ElevatedButton.icon(
-                icon: const Icon(Icons.camera_alt),
-                label: const Text('Fotoğraf Çek'),
+                icon:   Icon(Icons.camera_alt),
+                label:  Text('insertTakePhoto'.tr()),
                 onPressed: _pickImage,
               ),
 
@@ -218,7 +217,7 @@ class _InsertTestPageState extends State<InsertPage> {
                 onPressed: () async {
                   if (selectedCoordinates == null) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Lütfen haritadan bir konum seçin')),
+                       SnackBar(content: Text('insertChooseLocation'.tr())),
                     );
                     return;
                   }
@@ -239,7 +238,7 @@ class _InsertTestPageState extends State<InsertPage> {
                     coordinate: selectedCoordinates!,
                   );
                 },
-                child: const Text("Veriyi Yükle"),
+                child: Text("Upload".tr()),
               ),
             ],
           ),

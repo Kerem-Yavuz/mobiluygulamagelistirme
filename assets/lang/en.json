@@ -1,5 +1,4 @@
 {
-  "settings": "Settings",
   "dark_theme": "Dark Theme",
   "menu": "Menu",
   "addcomplaint": "Add Complaint",
@@ -37,5 +36,15 @@
   "insertComplaint": "Complaint",
   "insertOpenMap": "Open map",
   "insertTakePhoto": "Take Photo",
-  "insertChooseLocation": "Please Choose a Location"
+  "insertChooseLocation": "Please Choose a Location",
+  "Upload": "Send",
+  "snackbarsent": "Complaint Sent successfully",
+  "SnackBarError": "Problem occurred",
+  "SnackBarChoose": "Please select a location",
+  "PictureNotTaken": "Picture not received",
+  "LocationNotPicked": "location not selected",
+  "konum:": "Location:",
+  "Seçilen konum:": "Selected location:",
+  "Edit": "Edit"
+
 }
