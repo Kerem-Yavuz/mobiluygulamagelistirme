@@ -14,7 +14,6 @@ import 'package:mobiluygulamagelistirme/features/auth/signup.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 
 import 'features/auth/SplashScreen.dart';
@@ -159,11 +158,6 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final isDark = prefs.getBool('isDarkTheme') ?? false;
 
-  if (!kIsWeb) {
-    // Desktop için FFI başlat
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
-  }
 
   await Supabase.initialize(
     url: 'https://rldxceqyinumedzfptnq.supabase.co',

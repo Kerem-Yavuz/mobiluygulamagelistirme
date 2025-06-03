@@ -208,6 +208,7 @@ class _ProfilePageState extends State<ProfilePage> {
         await DBHelper.updateProfilePhoto(uid, publicUrl);
       }
       setState(() {
+        isEditing = false;
         profile!['profil_resmi'] = publicUrl;
       });
 
@@ -258,7 +259,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     onTap: uploadProfileImage,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.blue,
+                        color: Color(0xFFA63D40),
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.white, width: 2),
                       ),
@@ -331,19 +332,53 @@ class _ProfilePageState extends State<ProfilePage> {
                 : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("${profile!['isim']} ${profile!['soyisim']}",
-                    style: textTheme.headlineSmall),
-                const SizedBox(height: 8),
-                Text("Email: ${profile!['email']}", style: textTheme.bodyMedium),
-                const SizedBox(height: 8),
-                if (firebaseData != null) ...[
-                  Text('${'birthplace'.tr()} ${firebaseData!['dogumYeri'] ?? '-'}',
-                      style: textTheme.bodyMedium),
-                  Text('${'birthdate'.tr()} ${firebaseData!['dogumTarihi'] ?? '-'}',
-                      style: textTheme.bodyMedium),
-                  Text('${'livingplace'.tr()} ${firebaseData!['yasadigiIl'] ?? '-'}',
-                      style: textTheme.bodyMedium),
-                ],
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${profile!['isim']} ${profile!['soyisim']}",
+                      style: textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFA63D40),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      "Email: ${profile!['email']}",
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: Colors.grey[700],
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    if (firebaseData != null) ...[
+                      Text(
+                        '${'birthplace'.tr()} : ${firebaseData!['dogumYeri'] ?? '-'}',
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${'birthdate'.tr()} : ${firebaseData!['dogumTarihi'] ?? '-'}',
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${'livingplace'.tr()} : ${firebaseData!['yasadigiIl'] ?? '-'}',
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ],
+                )
+
               ],
             ),
             const SizedBox(height: 24),
