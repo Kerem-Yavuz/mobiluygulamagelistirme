@@ -1,5 +1,8 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,16 +17,73 @@ class InsertPage extends StatefulWidget {
   const InsertPage({super.key});
 
   @override
-  State<InsertPage> createState() => _InsertTestPageState();
+  State<InsertPage> createState() => _InsertPageState();
 }
 
-class _InsertTestPageState extends State<InsertPage> {
+class _InsertPageState extends State<InsertPage> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
+
   Map<String, double>? selectedCoordinates;
   File? _imageFile;
+  Uint8List? _webImageBytes;
 
-  final ImagePicker _picker = ImagePicker();
+  Future<void> _pickImage() async {
+    try {
+      if (kIsWeb) {
+        final result = await FilePicker.platform.pickFiles(
+          type: FileType.image,
+          withData: true,
+        );
+        if (result != null && result.files.isNotEmpty) {
+          setState(() {
+            _webImageBytes = result.files.first.bytes!;
+            _imageFile = null;
+          });
+        }
+      } else {
+        final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+        if (pickedFile != null) {
+          setState(() {
+            _imageFile = File(pickedFile.path);
+            _webImageBytes = null;
+          });
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Resim alınamadı: $e'.tr())),
+      );
+    }
+  }
+
+  Future<String> uploadComplaintImage(String userId) async {
+    final supabase = Supabase.instance.client;
+    final fileName = '${DateTime.now().millisecondsSinceEpoch}_$userId.png';
+    final filePath = 'complaint_images/$fileName';
+
+    try {
+      if (kIsWeb && _webImageBytes != null) {
+        await supabase.storage
+            .from('images')
+            .uploadBinary(filePath, _webImageBytes!,
+            fileOptions: const FileOptions(upsert: true));
+      } else if (_imageFile != null) {
+        await supabase.storage
+            .from('images')
+            .upload(filePath, _imageFile!,
+            fileOptions: const FileOptions(upsert: true));
+      } else {
+        throw Exception("Hiç resim seçilmedi.");
+      }
+
+      return supabase.storage.from('images').getPublicUrl(filePath);
+    } catch (e) {
+      print("Resim yükleme hatası: $e");
+      throw Exception("Resim yüklenemedi.");
+    }
+  }
 
   Future<void> insertData({
     required String userId,
@@ -58,40 +118,6 @@ class _InsertTestPageState extends State<InsertPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('SnackBarError: $e'.tr())),
       );
-    }
-  }
-
-  Future<void> _pickImage() async {
-    try {
-      final pickedFile = await _picker.pickImage(source: ImageSource.camera);
-      if (pickedFile != null) {
-        setState(() {
-          _imageFile = File(pickedFile.path);
-        });
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Resim alınamadı: $e'.tr())),
-      );
-    }
-  }
-
-  Future<String> uploadComplaintImage(File imageFile, String userId) async {
-    final supabase = Supabase.instance.client;
-    final fileName = '${DateTime.now().millisecondsSinceEpoch}_$userId.png';
-    final filePath = 'complaint_images/$fileName';
-
-    try {
-      await supabase.storage
-          .from('images')
-          .upload(filePath, imageFile, fileOptions: const FileOptions(upsert: true));
-
-      final publicUrl = supabase.storage.from('images').getPublicUrl(filePath);
-
-      return publicUrl;
-    } catch (e) {
-      print("Resim yükleme hatası: $e");
-      throw Exception("Resim yüklenemedi.");
     }
   }
 
@@ -195,16 +221,10 @@ class _InsertTestPageState extends State<InsertPage> {
                 decoration: InputDecoration(labelText: 'Complaint'.tr()),
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
+              ElevatedButton.icon(
+                icon: Icon(Icons.map),
+                label: Text("insertOpenMap".tr()),
                 onPressed: () => _showMapPicker(context),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min, // So the button size fits content nicely
-                  children: [
-                    Icon(Icons.map),              // The map icon
-                    SizedBox(width: 8),           // Some space between icon and text
-                    Text("insertOpenMap".tr()),
-                  ],
-                ),
               ),
               if (selectedCoordinates != null)
                 Padding(
@@ -228,6 +248,16 @@ class _InsertTestPageState extends State<InsertPage> {
                     height: 200,
                     fit: BoxFit.cover,
                   ),
+                )
+              else if (_webImageBytes != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Image.memory(
+                    _webImageBytes!,
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               const SizedBox(height: 20),
               ElevatedButton(
@@ -245,15 +275,13 @@ class _InsertTestPageState extends State<InsertPage> {
                   final description = descriptionController.text;
 
                   String imageUrl = '';
-                  if (_imageFile != null) {
-                    try {
-                      imageUrl = await uploadComplaintImage(_imageFile!, userId);
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Resim yüklenemedi: $e")),
-                      );
-                      return;
-                    }
+                  try {
+                    imageUrl = await uploadComplaintImage(userId);
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Resim yüklenemedi: $e")),
+                    );
+                    return;
                   }
 
                   await insertData(
