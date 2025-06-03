@@ -76,26 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
           'yasadigiIl': extraInfo?['yasadigiIl'] ?? '',
           'createdAt': FieldValue.serverTimestamp(),
         });
-
-        final Map<String, dynamic> userData = {
-          'uid': user.uid,
-          'email': user.email ?? '',
-          'name': (profile['name'] ?? ''),
-          'firstName': (profile['given_name'] ?? ''),
-          'lastName': (profile['family_name'] ?? ''),
-          'photoURL': (profile['picture'] ?? ''),
-          'dogumYeri': extraInfo?['dogumYeri'] ?? '',
-          'dogumTarihi': extraInfo?['dogumTarihi'] ?? '',
-          'yasadigiIl': extraInfo?['yasadigiIl'] ?? '',
-          'createdAt': DateTime.now().toIso8601String(),
-        };
-
-        await DBHelper().insertUser(userData);
-
-        print('New user inserted with extra info into Supabase And Firebase');
-      } else {
-        bool exists = await DBHelper.userExists(user.uid);
-        if (!exists) {
+        if (!kIsWeb) {
           final Map<String, dynamic> userData = {
             'uid': user.uid,
             'email': user.email ?? '',
@@ -103,12 +84,33 @@ class _LoginScreenState extends State<LoginScreen> {
             'firstName': (profile['given_name'] ?? ''),
             'lastName': (profile['family_name'] ?? ''),
             'photoURL': (profile['picture'] ?? ''),
+            'dogumYeri': extraInfo?['dogumYeri'] ?? '',
+            'dogumTarihi': extraInfo?['dogumTarihi'] ?? '',
+            'yasadigiIl': extraInfo?['yasadigiIl'] ?? '',
             'createdAt': DateTime.now().toIso8601String(),
           };
 
           await DBHelper().insertUser(userData);
-        } else {
-          print('Kullanıcı var');
+        }
+        print('New user inserted with extra info into Supabase And Firebase');
+      } else {
+        if (!kIsWeb) {
+          bool exists = await DBHelper.userExists(user.uid);
+          if (!exists) {
+            final Map<String, dynamic> userData = {
+              'uid': user.uid,
+              'email': user.email ?? '',
+              'name': (profile['name'] ?? ''),
+              'firstName': (profile['given_name'] ?? ''),
+              'lastName': (profile['family_name'] ?? ''),
+              'photoURL': (profile['picture'] ?? ''),
+              'createdAt': DateTime.now().toIso8601String(),
+            };
+
+            await DBHelper().insertUser(userData);
+          } else {
+            print('Kullanıcı var');
+          }
         }
       }
     }
@@ -172,25 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
               'createdAt': FieldValue.serverTimestamp(),
             });
 
-          final Map<String, dynamic> userData = {
-            'uid': user.uid,
-            'email': user.email ?? '',
-            'name': (profile['name'] ?? ''),
-            'firstName': (profile['given_name'] ?? ''),
-            'lastName': (profile['family_name'] ?? ''),
-            'photoURL': (profile['picture'] ?? ''),
-            'dogumYeri': extraInfo?['dogumYeri'] ?? '',
-            'dogumTarihi': extraInfo?['dogumTarihi'] ?? '',
-            'yasadigiIl': extraInfo?['yasadigiIl'] ?? '',
-            'createdAt': DateTime.now().toIso8601String(),
-          };
-
-          await DBHelper().insertUser(userData);
-
-            print('New user inserted with extra info into Supabase And Firebase');
-        } else {
-          bool exists = await DBHelper.userExists(user.uid);
-          if (!exists) {
+          if (!kIsWeb) {
             final Map<String, dynamic> userData = {
               'uid': user.uid,
               'email': user.email ?? '',
@@ -198,10 +182,31 @@ class _LoginScreenState extends State<LoginScreen> {
               'firstName': (profile['given_name'] ?? ''),
               'lastName': (profile['family_name'] ?? ''),
               'photoURL': (profile['picture'] ?? ''),
+              'dogumYeri': extraInfo?['dogumYeri'] ?? '',
+              'dogumTarihi': extraInfo?['dogumTarihi'] ?? '',
+              'yasadigiIl': extraInfo?['yasadigiIl'] ?? '',
               'createdAt': DateTime.now().toIso8601String(),
             };
 
             await DBHelper().insertUser(userData);
+          }
+            print('New user inserted with extra info into Supabase And Firebase');
+        } else {
+          if (!kIsWeb) {
+            bool exists = await DBHelper.userExists(user.uid);
+            if (!exists) {
+              final Map<String, dynamic> userData = {
+                'uid': user.uid,
+                'email': user.email ?? '',
+                'name': (profile['name'] ?? ''),
+                'firstName': (profile['given_name'] ?? ''),
+                'lastName': (profile['family_name'] ?? ''),
+                'photoURL': (profile['picture'] ?? ''),
+                'createdAt': DateTime.now().toIso8601String(),
+              };
+
+              await DBHelper().insertUser(userData);
+            }
           }
         }
 
@@ -266,17 +271,19 @@ class _LoginScreenState extends State<LoginScreen> {
         await prefs.setString('photoURL', user.photoURL ?? '');
       }
 
-      bool exists = await DBHelper.userExists(user!.uid);
-      if (!exists) {
-        final Map<String, dynamic> userData = {
-          'uid': user.uid,
-          'email': user.email ?? '',
-          'name': (user.displayName ?? ''),
-          'photoURL': (user.photoURL ?? ''),
-          'createdAt': DateTime.now().toIso8601String(),
-        };
+      if (!kIsWeb) {
+        bool exists = await DBHelper.userExists(user!.uid);
+        if (!exists) {
+          final Map<String, dynamic> userData = {
+            'uid': user.uid,
+            'email': user.email ?? '',
+            'name': (user.displayName ?? ''),
+            'photoURL': (user.photoURL ?? ''),
+            'createdAt': DateTime.now().toIso8601String(),
+          };
 
-        await DBHelper().insertUser(userData);
+          await DBHelper().insertUser(userData);
+        }
       }
       setState(() => isLoading = false);
       Navigator.pushReplacementNamed(context, '/newcomplaintlist');

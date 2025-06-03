@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,6 +23,9 @@ class _ProfilePageState extends State<ProfilePage> {
   Map<String, dynamic>? firebaseData;
   DateTime? _selectedDate;
   bool isEditing = false;
+  final ImagePicker _picker = ImagePicker();
+  File? _imageFile;
+  Uint8List? _webImageBytes;
 
   late TextEditingController nameController;
   late TextEditingController surnameController;
@@ -89,19 +94,20 @@ class _ProfilePageState extends State<ProfilePage> {
         .eq('uid', uid);
 
 
-    final Map<String, dynamic> userData = {
-      'uid': uid,
-      'email': emailController.text.trim() ?? '',
-      'name': "${nameController.text.trim()} ${surnameController.text.trim()}" ?? ' ',
-      'firstName':  nameController.text.trim() ?? '',
-      'lastName': surnameController.text.trim() ?? "",
-      'dogumYeri': dogumYeriController.text.trim() ?? '',
-      'dogumTarihi': _selectedDate ?? '',
-      'yasadigiIl': yasadigiIlController.text.trim() ?? '',
-    };
+    if (!kIsWeb) {
+      final Map<String, dynamic> userData = {
+        'uid': uid,
+        'email': emailController.text.trim() ?? '',
+        'name': "${nameController.text.trim()} ${surnameController.text.trim()}" ?? ' ',
+        'firstName':  nameController.text.trim() ?? '',
+        'lastName': surnameController.text.trim() ?? "",
+        'dogumYeri': dogumYeriController.text.trim() ?? '',
+        'dogumTarihi': _selectedDate ?? '',
+        'yasadigiIl': yasadigiIlController.text.trim() ?? '',
+      };
 
-    await DBHelper().updateUser(userData);
-
+      await DBHelper().updateUser(userData);
+    }
     setState(() {
       isEditing = false;
       profile!['isim'] = nameController.text;
@@ -114,52 +120,93 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
 
+  Future<void> _pickImage() async {
+    try {
+      if (kIsWeb) {
+        final result = await FilePicker.platform.pickFiles(
+          type: FileType.image,
+          withData: true,
+        );
+        if (result != null && result.files.isNotEmpty) {
+          setState(() {
+            _webImageBytes = result.files.first.bytes!;
+            _imageFile = null;
+          });
+        }
+      } else {
+        final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+        if (pickedFile != null) {
+          setState(() {
+            _imageFile = File(pickedFile.path);
+            _webImageBytes = null;
+          });
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Resim alınamadı: $e'.tr())),
+      );
+    }
+  }
+
 
   Future<void> uploadProfileImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    await _pickImage();
 
-    if (pickedFile == null) return;
+    if (_imageFile == null && _webImageBytes == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Lütfen bir resim seçin.")),
+      );
+      return;
+    }
 
-    final imageFile = File(pickedFile.path);
     final prefs = await SharedPreferences.getInstance();
     final uid = prefs.getString('uid');
     if (uid == null) return;
 
-    final filePath = 'profile_pictures/$uid.png'; // Her zaman .png olarak kaydedilecek
+    final filePath = 'profile_pictures/$uid.png';
     final supabase = Supabase.instance.client;
 
     try {
-      // Önce varsa eski dosyayı sil
+      // Varsa eski dosyayı sil
       final existingFiles = await supabase.storage.from('images').list(path: 'profile_pictures/');
       final fileExists = existingFiles.any((file) => file.name == '$uid.png');
 
       if (fileExists) {
         final deleted = await supabase.storage.from('images').remove([filePath]);
         if (deleted.isEmpty) {
-          print('Error deleting file.');
+          print('Eski dosya silinemedi.');
         } else {
-          print('Old file deleted successfully.');
+          print('Eski dosya silindi.');
         }
       }
 
-      // Yeni dosyayı yükle
-      await supabase.storage
-          .from('images')
-          .upload(filePath, imageFile, fileOptions: const FileOptions(upsert: true));
+      // Dosyayı yükle
+      if (kIsWeb && _webImageBytes != null) {
+        await supabase.storage
+            .from('images')
+            .uploadBinary(filePath, _webImageBytes!, fileOptions: const FileOptions(upsert: true));
+      } else if (_imageFile != null) {
+        await supabase.storage
+            .from('images')
+            .upload(filePath, _imageFile!, fileOptions: const FileOptions(upsert: true));
+      } else {
+        throw Exception("Hiç resim seçilmedi.");
+      }
 
       final publicUrl = supabase.storage.from('images').getPublicUrl(filePath);
 
-      await supabase.from('Profil_Bilgileri')
+      await supabase
+          .from('Profil_Bilgileri')
           .update({'profil_resmi': publicUrl})
           .eq('uid', uid);
 
       await prefs.setString('photoURL', publicUrl);
 
       print('Public URL: $publicUrl');
-
-      await DBHelper.updateProfilePhoto(uid, publicUrl);
-
+      if (!kIsWeb) {
+        await DBHelper.updateProfilePhoto(uid, publicUrl);
+      }
       setState(() {
         profile!['profil_resmi'] = publicUrl;
       });
@@ -174,6 +221,7 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     }
   }
+
 
 
   @override

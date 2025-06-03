@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -62,21 +63,22 @@ class _SignUpPageState extends State<SignUpPage> {
         print('Supabase insert error: $e');
       }
 
-      final Map<String, dynamic> userData = {
-        'uid': uid,
-        'email': _emailController.text.trim() ?? '',
-        'name': "${_nameController.text.trim()} ${_surnameController.text.trim()}" ?? ' ',
-        'firstName':  _nameController.text.trim() ?? '',
-        'lastName': _surnameController.text.trim() ?? "",
-        'photoURL': '',
-        'dogumYeri': _dogumYeriController.text.trim() ?? '',
-        'dogumTarihi': _selectedDate ?? '',
-        'yasadigiIl': _yasadigiIlController.text.trim() ?? '',
-        'createdAt': DateTime.now().toIso8601String(),
-      };
+      if (!kIsWeb) {
+        final Map<String, dynamic> userData = {
+          'uid': uid,
+          'email': _emailController.text.trim() ?? '',
+          'name': "${_nameController.text.trim()} ${_surnameController.text.trim()}" ?? ' ',
+          'firstName':  _nameController.text.trim() ?? '',
+          'lastName': _surnameController.text.trim() ?? "",
+          'photoURL': '',
+          'dogumYeri': _dogumYeriController.text.trim() ?? '',
+          'dogumTarihi': _selectedDate ?? '',
+          'yasadigiIl': _yasadigiIlController.text.trim() ?? '',
+          'createdAt': DateTime.now().toIso8601String(),
+        };
 
-      await DBHelper().insertUser(userData);
-
+        await DBHelper().insertUser(userData);
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Kayıt başarılı')),
       );
