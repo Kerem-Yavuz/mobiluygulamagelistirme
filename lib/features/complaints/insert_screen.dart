@@ -8,9 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../core/widgets/appbar.dart';
 import '../../core/base/base_page.dart';
-import '../../core/widgets/drawer.dart';
 import '../map/widgets/tappable_image.dart';
 
 class InsertPage extends StatefulWidget {
@@ -31,7 +29,7 @@ class _InsertPageState extends State<InsertPage> {
 
   Future<void> _pickImage() async {
     try {
-      if (kIsWeb) {
+      if (kIsWeb) { //Pick image for web
         final result = await FilePicker.platform.pickFiles(
           type: FileType.image,
           withData: true,
@@ -42,7 +40,7 @@ class _InsertPageState extends State<InsertPage> {
             _imageFile = null;
           });
         }
-      } else {
+      } else { //Pick image for mobile
         final pickedFile = await _picker.pickImage(source: ImageSource.camera);
         if (pickedFile != null) {
           setState(() {
@@ -64,12 +62,12 @@ class _InsertPageState extends State<InsertPage> {
     final filePath = 'complaint_images/$fileName';
 
     try {
-      if (kIsWeb && _webImageBytes != null) {
+      if (kIsWeb && _webImageBytes != null) { // Upload web image bytes to Supabase storage
         await supabase.storage
             .from('images')
             .uploadBinary(filePath, _webImageBytes!,
             fileOptions: const FileOptions(upsert: true));
-      } else if (_imageFile != null) {
+      } else if (_imageFile != null) { // Upload mobile image file to Supabase storage
         await supabase.storage
             .from('images')
             .upload(filePath, _imageFile!,
@@ -78,7 +76,7 @@ class _InsertPageState extends State<InsertPage> {
         throw Exception("Hiç resim seçilmedi.");
       }
 
-      return supabase.storage.from('images').getPublicUrl(filePath);
+      return supabase.storage.from('images').getPublicUrl(filePath); // Return public URL of uploaded image
     } catch (e) {
       print("Resim yükleme hatası: $e");
       throw Exception("Resim yüklenemedi.");
@@ -95,7 +93,7 @@ class _InsertPageState extends State<InsertPage> {
     final supabase = Supabase.instance.client;
 
     try {
-      final response = await supabase.from('Complaints').insert({
+      final response = await supabase.from('Complaints').insert({ // Insert complaint data into Supabase table
         'user_id': userId,
         'title': title,
         'description': description,
@@ -168,7 +166,7 @@ class _InsertPageState extends State<InsertPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
+                    children: [ // Show selected coordinates
                       Text(
                         tempCoords != null
                             ? 'Konum: ${tempCoords!['lat']?.toStringAsFixed(4)}, ${tempCoords!['lng']?.toStringAsFixed(4)}'.tr()
@@ -239,7 +237,7 @@ class _InsertPageState extends State<InsertPage> {
                 label: Text('insertTakePhoto'.tr()),
                 onPressed: _pickImage,
               ),
-              if (_imageFile != null)
+              if (_imageFile != null) // Display the selected image
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
                   child: Image.file(
@@ -269,6 +267,7 @@ class _InsertPageState extends State<InsertPage> {
                     return;
                   }
 
+                  // Get user ID from SharedPreferences
                   final prefs = await SharedPreferences.getInstance();
                   final userId = prefs.getString('uid') ?? '';
                   final title = titleController.text;
@@ -276,7 +275,7 @@ class _InsertPageState extends State<InsertPage> {
 
                   String imageUrl = '';
                   try {
-                    imageUrl = await uploadComplaintImage(userId);
+                    imageUrl = await uploadComplaintImage(userId); // Upload image and get public URL
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Resim yüklenemedi: $e")),
@@ -284,7 +283,7 @@ class _InsertPageState extends State<InsertPage> {
                     return;
                   }
 
-                  await insertData(
+                  await insertData( //insert the data into Supabase database
                     userId: userId,
                     title: title,
                     description: description,

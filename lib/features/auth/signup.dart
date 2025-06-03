@@ -58,7 +58,7 @@ class _SignUpPageState extends State<SignUpPage> {
           'uid': uid,
         });
 
-        print('✅ New user inserted into Supabase');
+        print('New user inserted into Supabase');
       } catch (e) {
         print('Supabase insert error: $e');
       }

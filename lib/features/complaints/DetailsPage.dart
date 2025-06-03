@@ -27,7 +27,7 @@ class ComplaintDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: MyAppBar(title: 'complaintdetails'.tr()),
       body: FutureBuilder<Map<String, dynamic>>(
-        future: fetchComplaintDetail(),
+        future: fetchComplaintDetail(), //fetch complaint details
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -37,7 +37,7 @@ class ComplaintDetailPage extends StatelessWidget {
             return const Center(child: Text('Veri bulunamadı'));
           }
 
-          final complaint = snapshot.data!;
+          final complaint = snapshot.data!; // Extract complaint data
           final title = complaint['title'] ?? 'Başlıksız';
           final description = complaint['description'] ?? 'Açıklama yok';
           final coordinate = complaint['coordinate'];
@@ -53,6 +53,7 @@ class ComplaintDetailPage extends StatelessWidget {
 
               double displayedWidth, displayedHeight;
 
+              // Scale height and width accordingly
               if (containerRatio > imageRatio) {
                 displayedHeight = containerHeight;
                 displayedWidth = displayedHeight * imageRatio;

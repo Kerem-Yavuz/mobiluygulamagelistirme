@@ -11,13 +11,13 @@ class ComplaintsPage extends StatefulWidget {
 }
 
 class _ComplaintListPageState extends State<ComplaintsPage> {
-  final supabase = Supabase.instance.client;
+  final supabase = Supabase.instance.client; // Access the Supabase client
   List<dynamic> complaints = [];
 
   @override
   void initState() {
     super.initState();
-    fetchComplaints();
+    fetchComplaints(); // Fetch complaints
   }
 
   Future<void> fetchComplaints() async {
@@ -25,7 +25,7 @@ class _ComplaintListPageState extends State<ComplaintsPage> {
       final response = await supabase
           .from('Complaints')
           .select()
-          .order('id', ascending: false);
+          .order('id', ascending: false); // Order by ID descending
 
       setState(() {
         complaints = response;
@@ -60,7 +60,7 @@ class _ComplaintListPageState extends State<ComplaintsPage> {
                   ),
                 );
               },
-              trailing: imageUrl != null && imageUrl.toString().isNotEmpty
+              trailing: imageUrl != null && imageUrl.toString().isNotEmpty //Check if image exists
                   ? ClipRRect(
                 borderRadius: BorderRadius.circular(6),
                 child: Image.network(
@@ -69,7 +69,7 @@ class _ComplaintListPageState extends State<ComplaintsPage> {
                   height: 60,
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
+                    if (loadingProgress == null) return child; // Show image if loaded
                     return SizedBox(
                       width: 60,
                       height: 60,
