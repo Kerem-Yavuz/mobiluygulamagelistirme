@@ -13,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     _checkLoginStatus();
   }
-
+   //Kullanıcı bilgileri kayıtlıysa
   Future<void> _checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final uid = prefs.getString('uid');

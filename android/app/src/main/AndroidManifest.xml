@@ -2,6 +2,16 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Galeri veya dosya erişimi için -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <!-- Kamera kullanımı için -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <!-- Android 13+ için dosya okuma izni değişti -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+
+
 
     <application
         android:label="mobiluygulamagelistirme"

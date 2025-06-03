@@ -1,67 +1,59 @@
-### **Hocam uygulamayı açarken web kullanmayın server http olduğu için açılmayabilir. birde okul ağında http isteklerine izin vermediği için emülatör içinde sıkıntı olabilir direkt olarak telefonunuzdan denemek isterseniz [apk](https://github.com/Kerem-Yavuz/mobiluygulamagelistirme/blob/main/app-release.apk)yı ekledik**
+#  Şikayet Bildirim Uygulaması
 
-## Giriş İçin Bilgiler:
+Bu mobil uygulama, üniversite kampüsünde karşılaşılan sorunların hızlıca bildirilmesini ve görevlilere iletilmesini amaçlar. Kullanıcılar uygulama üzerinden şikayetlerini oluşturabilir, harita üzerinden konum belirleyebilir ve şikayet detaylarını görüntüleyebilir.
 
-Kullanıcı Adı: hakan.gencoglu@gmail.com
-Şifre: 123456
+##  Giriş Bilgileri (Test Kullanıcısı)
 
-## Sayfaların Görevleri ve İçerikleri:
+- **Kullanıcı Adı:** `test@gmail.com`  
+- **Şifre:** `123456`
 
-appbar -> Sayfalar için özel appbar tasarımı ve yapısı
+>  Bu bilgiler test amaçlıdır. Gerçek kullanıcılar uygulama üzerinden kayıt olabilir.
 
-base_page -> Sayfa yapısı için genel base widget, tüm sayfalarda ortak tasarım
+---
 
-complaints -> Şikayet yazma ve şikayetlerle ilgili işlemler
+##  Proje Dosya Yapısı ve Görevleri
 
-DetailsPage -> Şikayet detaylarını gösteren sayfa
+| Klasör/Dosya | Açıklama |
+|-------------|----------|
+| `appbar` | Sayfalar için özelleştirilmiş AppBar bileşeni |
+| `base_page` | Tüm sayfalarda kullanılan temel yapı (base widget) |
+| `complaints` | Şikayet oluşturma ve listeleme işlemleri |
+| `DetailsPage` | Şikayet detaylarını gösteren sayfa |
+| `drawer` | Uygulama içinde gezinme sağlayan yan menü |
+| `firebase_config` | Firebase yapılandırma ayarları |
+| `insert_screen` | Yeni şikayet ekleme ekranı |
+| `login_screen` | Kullanıcı giriş ekranı (Supabase ile entegre) |
+| `map` | Harita işlemleri için genel yapı |
+| `mapPage` | Haritanın ana sayfada gösterildiği yapı |
+| `MapWithSinglePoin` | Haritada tek nokta gösterimi |
+| `profile` | Kullanıcı profil bilgileri ve görsel güncelleme |
+| `settings` | Uygulama ayarları (örneğin tema seçimi) |
+| `signup` | Yeni kullanıcı kayıt ekranı |
+| `SplashScreen` | Uygulama başlatıldığında açılan ilk ekran |
+| `tappable_image` | Harita üzerinde koordinat seçimi için görsel yapı |
+| `ThemeNotifier` | Tema yönetimi ve bildirim sistemi |
 
-drawer -> Uygulama için yan menü
+---
 
-firebase -> Firebase bağlantı ve işlemleri
+##  Geliştirici Ekibi ve Sorumluluklar
 
-firebase_config -> Firebase konfigürasyon ayarları
+| İsim | Görevler |
+|------|---------|
+| **Abdullah Kerem Yavuz** | `login_screen`, Supabase entegrasyonu, `profile`, görsel yükleme işlemleri , bugfix |
+| **Kerem Yavuz** | `appbar`, `drawer`, `firebase_config`, `base_page`, `map`, `settings`, `signup`, `SplashScreen`, `ThemeNotifier`, Single sign on |
+| **Taha İslam Güven** |  `complaints`, `DetailsPage`, `insert_screen`, `mapPage`, `MapWithSinglePoin`, `tappable_image`, Genel düzenleme, |
 
-insert_screen -> şikayet ekleme ekranı
+---
 
-login_screen -> Kullanıcı giriş ekranı
+##  Proje Amacı
 
-map -> Harita ile ilgili genel işlemler
+Bu uygulamanın amacı, kampüs ortamında karşılaşılan fiziksel veya sistemsel problemlerin hızlıca yetkili kişilere bildirilmesini ve takibinin sağlanmasını kolaylaştırmaktır. Harita üzerinden konum belirleme, detaylı açıklama ekleme ve kullanıcı dostu bir arayüz ile süreçler hızlandırılmıştır.
 
-mapPage -> Harita sayfası, harita gösterimi
+---
 
-MapWithSinglePoin -> Harita üzerinde tek bir nokta gösterimi
+##  Kurulum ve Başlatma
 
-profile -> Kullanıcı profil sayfası
-
-ResimSaglayici -> Resim çekme ve seçme işlemleri için yardımcı sınıf
-
-settings -> Ayarlar sayfası
-
-signup -> Kullanıcı kayıt ekranı
-
-SplashScreen -> Uygulama açılış ekranı
-
-tappable_image -> Harita üzerinde koordinat seçmek için
-
-ThemeNotifier -> Tema değiştirme ve bildirim yönetimi
-
-
-### Logo Apisi : https://cdn-icons-png.flaticon.com/512/1997/1997401.png
-
-
-### Login bilgilerini ve şikayet bilgilerini AWS de oluşturuduğumuz bir containerda node.js ve mysql ile backendimizi çalıştırıyoruz ve burda saklıyoruz
-
-## Grup Üyeleri
-
-Abdullah Kerem Yavuz -> Login Screen + server tarafı
-
-Kerem Yavuz -> Appbar, Drawer + server tarafı
-
-Taha İslam Güven -> Şikayet ile ilgili sayfalar + Genel düzenleme 
-
-
-Proje Amacı : Okulda gördüğümüz sıkıntıların daha hızlı giderilmesi ve görevlilere kolaylık sağlanması
-
-
-
-
+1. Projeyi klonlayın:  
+   ```bash
+   git clone https://github.com/kullaniciadi/sikayet-uygulamasi.git
+   cd sikayet-uygulamasi
