@@ -346,7 +346,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Text(
                       "Email: ${profile!['email']}",
                       style: textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey[700],
+                        color: Color(0xFFA63D40),
                         fontStyle: FontStyle.italic,
                       ),
                     ),
@@ -355,7 +355,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Text(
                         '${'birthplace'.tr()} : ${firebaseData!['dogumYeri'] ?? '-'}',
                         style: textTheme.bodyMedium?.copyWith(
-                          color: Colors.black87,
+                          color: Color(0xFFA63D40),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -363,7 +363,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Text(
                         '${'birthdate'.tr()} : ${firebaseData!['dogumTarihi'] ?? '-'}',
                         style: textTheme.bodyMedium?.copyWith(
-                          color: Colors.black87,
+                          color: Color(0xFFA63D40),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -371,7 +371,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Text(
                         '${'livingplace'.tr()} : ${firebaseData!['yasadigiIl'] ?? '-'}',
                         style: textTheme.bodyMedium?.copyWith(
-                          color: Colors.black87,
+                          color: Color(0xFFA63D40),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
